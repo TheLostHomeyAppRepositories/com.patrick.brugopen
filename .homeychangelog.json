@@ -2,5 +2,13 @@
   "1.0.0": {
     "en": "First release.",
     "nl": "Eerste release."
+  },
+  "1.0.1": {
+    "en": "Improved bridge search for alternative and commonly used bridge names.",
+    "nl": "Brug zoeken verbeterd voor alternatieve en veelgebruikte brugnamen."
+  },
+  "1.0.2": {
+    "en": "Nationwide bridge search improved using Rijkswaterstaat bridge, opening and ISRS names, with PDOK/Kadaster as a public-name fallback.",
+    "nl": "Landelijk brug zoeken verbeterd met Rijkswaterstaat brug-, doorvaartopening- en ISRS-namen, met PDOK/Kadaster als vangnet voor publieksnamen."
   }
 }

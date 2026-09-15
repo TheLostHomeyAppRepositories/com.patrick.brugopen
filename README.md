@@ -4,7 +4,7 @@
 
 Met **Brug Open** kun je bruggen in Nederland toevoegen aan Homey. Je ziet of een brug open of dicht is en, wanneer beschikbaar, wanneer de volgende opening gepland staat.
 
-De app gebruikt openbare gegevens van **NDW** en **Rijkswaterstaat**.
+De app gebruikt openbare gegevens van **NDW**, **Rijkswaterstaat** en **PDOK/Kadaster**.
 
 ## Wat kun je ermee?
 
@@ -53,13 +53,13 @@ Zo kun je bijvoorbeeld een melding krijgen wanneer een brug opent of wanneer een
 
 ## Beschikbaarheid van gegevens
 
-De app is afhankelijk van de gegevens die NDW en Rijkswaterstaat beschikbaar stellen. Niet voor iedere brug is altijd een geplande opening bekend.
+De app is afhankelijk van de gegevens die NDW en Rijkswaterstaat beschikbaar stellen. Niet voor iedere brug is altijd een geplande opening bekend. Voor het herkennen van gangbare brugnamen kan de app ook de openbare PDOK Location API gebruiken.
 
 Bij een tijdelijke storing blijft de laatst bekende status behouden totdat nieuwe gegevens beschikbaar zijn.
 
 ## Privacy
 
-Brug Open gebruikt geen account en vraagt geen persoonlijke gegevens. De app leest alleen openbare brug- en verkeersgegevens.
+Brug Open gebruikt geen account en vraagt geen persoonlijke gegevens. De app leest alleen openbare brug-, locatie- en verkeersgegevens. PDOK/Kadaster Location API-data valt onder CC BY 4.0.
 
 ## Ondersteuning
 

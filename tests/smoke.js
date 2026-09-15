@@ -7,8 +7,11 @@ const root = path.resolve(__dirname, '..');
 const { parseBridgeFeed, extractIsrs } = require('../lib/datex_bridge_parser');
 const { deriveBridgeState, applySnapshotPolicy, applyCurrentSnapshotPolicy, mergeBridgeStates } = require('../lib/bridge_state');
 const {
-  scoreBridge, movable, FisClient, mapOgcBridgeFeature, buildBridgeFilter, broadSearchTerm,
+  scoreBridge, movable, FisClient, mapOgcBridgeFeature, buildBridgeFilter, broadSearchTerm, smartFallbackTerm,
+  deriveSearchTerms, cleanOpeningName, buildOpeningFilter, buildIsrsFilter,
 } = require('../lib/fis_client');
+const { applyBridgeAlias, aliasSearchTerm } = require('../lib/bridge_aliases');
+const { geometryCenter } = require('../lib/pdok_client');
 
 function fixture(n) { return fs.readFileSync(path.join(__dirname, 'fixtures', n), 'utf8'); }
 
@@ -110,15 +113,22 @@ function testSearchHelpers() {
   assert(movable('Yes'));
   assert(!movable('No'));
   const f = mapOgcBridgeFeature({
-    properties: { id: 10, name: 'Botlekbrug', city: 'Rotterdam', isrsid: 38136315, canopen: 'Yes' },
+    properties: { id: 10, name: 'Botlekbrug', city: 'Rotterdam', isrsid: 38136315, canopen: 'Yes', relatedbuildingcomplexname: 'Botlekcomplex' },
     geometry: { type: 'Point', coordinates: [4.3, 51.9] },
   });
   assert.strictEqual(f.name, 'Botlekbrug');
   assert.strictEqual(f.isrsId, 38136315);
   assert.strictEqual(f.lon, 4.3);
+  assert.strictEqual(f.relatedBuildingComplexName, 'Botlekcomplex');
   assert(buildBridgeFilter('Botlek').includes("canopen = 'Yes'"));
   assert(buildBridgeFilter("O'Brien").includes("O''Brien"));
-  assert.strictEqual(broadSearchTerm('Botlekbrg'), 'botle');
+  assert(buildOpeningFilter('Botlek').includes("parentgeotype = 'bridge'"));
+  assert(buildIsrsFilter('Botlek').includes("countrycode = 'NL'"));
+  assert.strictEqual(broadSearchTerm('botlekbrg'), 'botle');
+  assert(deriveSearchTerms('Julianasluisbrug Zuid').includes('julianasluis'));
+  assert(deriveSearchTerms('Spijkenisserbrug').includes('spijkenisser'));
+  assert.strictEqual(cleanOpeningName('Doorvaartopening 1 (beweegbaar) Abtswoudsebrug'), 'Abtswoudsebrug');
+  assert.strictEqual(cleanOpeningName('Doorvaartopening (vast) brug in Lekkumerweg'), 'brug in Lekkumerweg');
 }
 
 async function testTargetedOgcSearchAndLazyIsrsResolve() {
@@ -190,6 +200,206 @@ async function testBoundedFuzzyFallback() {
   assert.strictEqual(r[0].name, 'Botlekbrug');
 }
 
+
+async function testNationalMultiSourceSearch() {
+  const urls = [];
+  const c = new FisClient({
+    getJson: async url => {
+      urls.push(url);
+      const u = new URL(url);
+      const filter = (u.searchParams.get('filter') || '').toLowerCase();
+
+      if (url.includes('/collections/brug/items')) {
+        // Exact public-name request returns nothing, generic "julianasluis" fallback returns both movable bridges.
+        if (filter.includes('julianasluisbrug zuid')) {
+          return { json: { type: 'FeatureCollection', features: [], links: [] } };
+        }
+        if (filter.includes('julianasluis') && !filter.includes('id =') && !filter.includes('isrsid =')) {
+          return { json: { type: 'FeatureCollection', features: [
+            {
+              type: 'Feature',
+              properties: { id: 201, name: 'Brug over binnenhoofd Julianasluis', city: 'Gouda', isrsid: 143, canopen: 'Yes' },
+              geometry: { type: 'Point', coordinates: [4.7100, 52.0120] },
+            },
+            {
+              type: 'Feature',
+              properties: { id: 202, name: 'Brug over buitenhoofd Julianasluis', city: 'Gouda', isrsid: 144, canopen: 'Yes' },
+              geometry: { type: 'Point', coordinates: [4.7100, 52.0060] },
+            },
+          ], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+
+      if (url.includes('/collections/opening/items')) {
+        return { json: { type: 'FeatureCollection', features: [{
+          type: 'Feature',
+          properties: {
+            id: 501,
+            name: 'Doorvaartopening (beweegbaar) Julianasluis',
+            parentid: 202,
+            parentgeotype: 'bridge',
+            isrsid: 9001,
+            type: 'OPH',
+          },
+        }], links: [] } };
+      }
+
+      if (url.includes('/collections/isrs_object/items')) {
+        // Search-stage ISRS request.
+        if (!filter.includes('id =')) {
+          return { json: { type: 'FeatureCollection', features: [{ properties: {
+            id: 144,
+            code: 'NLGOU002700536600144',
+            countrycode: 'NL',
+            objectname: 'Brug over buitenhoofd Julianasluis',
+            function: 'bridge_5',
+          }}], links: [] } };
+        }
+        // Resolve-stage exact ID request.
+        return { json: { type: 'FeatureCollection', features: [{ properties: {
+          id: 144,
+          code: 'NLGOU002700536600144',
+          countrycode: 'NL',
+          objectname: 'Brug over buitenhoofd Julianasluis',
+          function: 'bridge_5',
+        }}], links: [] } };
+      }
+
+      throw new Error(`Unexpected HTTP call ${url}`);
+    },
+  });
+
+  const result = await c.search('Julianasluisbrug Zuid', 10);
+  assert(result.length >= 2, 'Generic fallback should find both Julianasluis bridge objects');
+  assert.strictEqual(result[0].name, 'Julianasluisbrug Zuid', 'South direction should rank the southern bridge first');
+  assert.strictEqual(result[0].sourceName, 'Brug over buitenhoofd Julianasluis');
+  assert(result[0].searchNames.some(name => /julianasluis/i.test(name)));
+  assert(urls.some(url => url.includes('/collections/opening/items')), 'Opening names must participate in fallback search');
+  assert(urls.some(url => url.includes('/collections/isrs_object/items')), 'ISRS object names must participate in fallback search');
+  assert(!urls.some(url => /limit=1000/.test(url)), 'Search must never download the complete catalogue');
+
+  const resolved = await c.resolveBridge(result[0]);
+  assert.strictEqual(resolved.isrs, 'NLGOU002700536600144');
+}
+
+async function testOpeningNameResolvesBridge() {
+  const c = new FisClient({
+    pdokClient: { searchBridgeName: async () => [] },
+    getJson: async url => {
+      const u = new URL(url);
+      const filter = (u.searchParams.get('filter') || '').toLowerCase();
+      if (url.includes('/collections/opening/items')) {
+        if (filter.includes('abtswoudse')) {
+          return { json: { type: 'FeatureCollection', features: [{
+            type: 'Feature',
+            properties: { id: 601, name: 'Doorvaartopening 1 (beweegbaar) Abtswoudsebrug', parentid: 401, parentgeotype: 'bridge', isrsid: 9601, type: 'DR' },
+          }], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      if (url.includes('/collections/isrs_object/items')) {
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      if (url.includes('/collections/brug/items')) {
+        if (filter.includes('id = 401')) {
+          return { json: { type: 'FeatureCollection', features: [{
+            type: 'Feature',
+            properties: { id: 401, name: 'Technische brugnaam Delft', city: 'Delft', isrsid: 9401, canopen: 'Yes' },
+            geometry: { type: 'Point', coordinates: [4.35, 52.0] },
+          }], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      throw new Error(`Unexpected ${url}`);
+    },
+  });
+  const result = await c.search('Abtswoudsebrug', 10);
+  assert.strictEqual(result.length, 1);
+  assert(result[0].searchNames.some(name => /Abtswoudsebrug/i.test(name)), 'Opening name must become a searchable bridge name');
+}
+
+async function testIsrsObjectNameResolvesBridge() {
+  const c = new FisClient({
+    pdokClient: { searchBridgeName: async () => [] },
+    getJson: async url => {
+      const u = new URL(url);
+      const filter = (u.searchParams.get('filter') || '').toLowerCase();
+      if (url.includes('/collections/isrs_object/items')) {
+        if (filter.includes('publieke isrs naam')) {
+          return { json: { type: 'FeatureCollection', features: [{ properties: {
+            id: 9402, code: 'NLXXX000000000009402', countrycode: 'NL', objectname: 'Publieke ISRS Naam', function: 'bridge_1',
+          }}], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      if (url.includes('/collections/opening/items')) {
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      if (url.includes('/collections/brug/items')) {
+        if (filter.includes('isrsid = 9402')) {
+          return { json: { type: 'FeatureCollection', features: [{
+            type: 'Feature',
+            properties: { id: 402, name: 'Technische FIS naam 2', city: 'Teststad', isrsid: 9402, canopen: 'Yes' },
+            geometry: { type: 'Point', coordinates: [5.1, 52.1] },
+          }], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      throw new Error(`Unexpected ${url}`);
+    },
+  });
+  const result = await c.search('Publieke ISRS Naam', 10);
+  assert.strictEqual(result.length, 1);
+  assert(result[0].searchNames.includes('Publieke ISRS Naam'));
+}
+
+async function testPdokPublicNameFallback() {
+  const urls = [];
+  const c = new FisClient({
+    getJson: async url => {
+      urls.push(url);
+      if (url.includes('api.pdok.nl/kadaster/location-api/v1/search')) {
+        const u = new URL(url);
+        assert.strictEqual(u.searchParams.get('q'), 'Lokale Brugnaam');
+        assert.strictEqual(u.searchParams.get('inrichtingselement[version]'), '1');
+        return { json: { type: 'FeatureCollection', features: [{
+          type: 'Feature',
+          properties: { display_name: 'Lokale Brugnaam' },
+          geometry: { type: 'Point', coordinates: [4.5000, 52.0000] },
+        }] } };
+      }
+      if (url.includes('/collections/brug/items')) {
+        const u = new URL(url);
+        if (u.searchParams.get('bbox')) {
+          return { json: { type: 'FeatureCollection', features: [{
+            type: 'Feature',
+            properties: { id: 301, name: 'Technische FIS naam', city: 'Voorbeeldstad', isrsid: 9301, canopen: 'Yes' },
+            geometry: { type: 'Point', coordinates: [4.5005, 52.0003] },
+          }], links: [] } };
+        }
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      if (url.includes('/collections/opening/items') || url.includes('/collections/isrs_object/items')) {
+        return { json: { type: 'FeatureCollection', features: [], links: [] } };
+      }
+      throw new Error(`Unexpected ${url}`);
+    },
+  });
+
+  const result = await c.search('Lokale Brugnaam', 10);
+  assert.strictEqual(result.length, 1);
+  assert.strictEqual(result[0].name, 'Lokale Brugnaam');
+  assert.strictEqual(result[0].sourceName, 'Technische FIS naam');
+  assert(urls.some(url => url.includes('api.pdok.nl')), 'PDOK must be used only as a public-name fallback');
+  assert(urls.some(url => new URL(url).searchParams.get('bbox')), 'PDOK location must be linked back to a nearby movable FIS bridge');
+  assert(!urls.some(url => /limit=1000/.test(url)));
+
+  const center = geometryCenter({ type: 'LineString', coordinates: [[4.4, 52.0], [4.6, 52.2]] });
+  assert(Math.abs(center.lon - 4.5) < 1e-9);
+  assert(Math.abs(center.lat - 52.1) < 1e-9);
+}
+
 async function testIsrsArcgisFallbackIsExactAndSmall() {
   const urls = [];
   const c = new FisClient({
@@ -249,7 +459,7 @@ function testRealtimeFeedConfiguration() {
 
 function testStoreReadinessText() {
   const compose = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'app.json'), 'utf8'));
-  assert.strictEqual(compose.version, '1.0.0');
+  assert.strictEqual(compose.version, '1.0.2');
   assert.strictEqual(compose.description.nl, 'Weet wanneer een brug je route kan onderbreken.');
   assert.strictEqual(compose.description.en, 'Know when a bridge may interrupt your route.');
   const flowCondition = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'flow', 'conditions', 'bridge_status_is.json'), 'utf8'));
@@ -289,13 +499,17 @@ function testModuleSyntax() {
   testSearchHelpers();
   await testTargetedOgcSearchAndLazyIsrsResolve();
   await testBoundedFuzzyFallback();
+  await testNationalMultiSourceSearch();
+  await testOpeningNameResolvesBridge();
+  await testIsrsObjectNameResolvesBridge();
+  await testPdokPublicNameFallback();
   await testIsrsArcgisFallbackIsExactAndSmall();
   testPairViewNoAutoSearch();
   testRealtimeFeedConfiguration();
   testBridgeOpenIndicatorCapability();
   testStoreReadinessText();
   testModuleSyntax();
-  console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted FIS search, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, Flow titleFormatted, and SDK modules.');
+  console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted nationwide FIS search, bridge/opening/ISRS name matching, opening-parent and ISRS-name resolution, PDOK public-name fallback, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, Flow titleFormatted, and SDK modules.');
 })().catch(e => {
   console.error(e);
   process.exit(1);
