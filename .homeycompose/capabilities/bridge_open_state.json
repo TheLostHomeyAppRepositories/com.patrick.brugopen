@@ -1,0 +1,35 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Bridge open",
+    "nl": "Brug open"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "values": [
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Unknown",
+        "nl": "Onbekend"
+      }
+    },
+    {
+      "id": "no",
+      "title": {
+        "en": "No",
+        "nl": "Nee"
+      }
+    },
+    {
+      "id": "yes",
+      "title": {
+        "en": "Yes",
+        "nl": "Ja"
+      }
+    }
+  ],
+  "icon": "/assets/icons/bridge-open.svg"
+}

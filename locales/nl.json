@@ -1,0 +1,31 @@
+{
+  "pair": {
+    "title": "Brug zoeken",
+    "intro": "Vul een brugnaam of plaats in en druk op Zoeken. Alleen beweegbare bruggen worden opgevraagd.",
+    "placeholder": "Bijvoorbeeld Botlek, Spijkenisse of Erasmusbrug",
+    "search": "Zoeken",
+    "searching": "Bruggen zoeken…",
+    "min_chars": "Typ minimaal 2 tekens.",
+    "no_results": "Geen passende beweegbare brug gevonden.",
+    "add": "Toevoegen",
+    "adding": "Brug toevoegen…",
+    "already_paired": "Al toegevoegd",
+    "search_failed": "Zoeken is mislukt. Probeer het opnieuw.",
+    "pair_failed": "De brug kon niet worden toegevoegd.",
+    "missing_selection": "De geselecteerde brug is niet meer beschikbaar. Zoek opnieuw.",
+    "unknown_city": "Plaats onbekend"
+  },
+  "status": {
+    "unknown": "Onbekend",
+    "planned": "Aangekondigd",
+    "open": "Open",
+    "closed": "Dicht"
+  },
+  "values": {
+    "none": "—"
+  },
+  "errors": {
+    "no_device": "Geen brug geselecteerd.",
+    "refresh_failed": "NDW kon niet worden ververst."
+  }
+}

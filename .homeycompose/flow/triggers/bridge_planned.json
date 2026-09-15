@@ -1,0 +1,72 @@
+{
+  "id": "bridge_planned",
+  "title": {
+    "en": "Opening announced",
+    "nl": "Opening aangekondigd"
+  },
+  "hint": {
+    "en": "Triggers when NDW announces an upcoming bridge opening.",
+    "nl": "Start wanneer NDW een komende brugopening aankondigt."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      }
+    },
+    {
+      "name": "status_id",
+      "type": "string",
+      "title": {
+        "en": "Status ID",
+        "nl": "Status-ID"
+      }
+    },
+    {
+      "name": "planned_start",
+      "type": "string",
+      "title": {
+        "en": "Planned start",
+        "nl": "Geplande start"
+      }
+    },
+    {
+      "name": "planned_end",
+      "type": "string",
+      "title": {
+        "en": "Planned end",
+        "nl": "Gepland einde"
+      }
+    },
+    {
+      "name": "probability",
+      "type": "string",
+      "title": {
+        "en": "Probability",
+        "nl": "Waarschijnlijkheid"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

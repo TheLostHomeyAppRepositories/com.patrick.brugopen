@@ -1,0 +1,18 @@
+{
+  "id": "bridge_is_open",
+  "title": {
+    "en": "Bridge is open",
+    "nl": "Brug is open"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

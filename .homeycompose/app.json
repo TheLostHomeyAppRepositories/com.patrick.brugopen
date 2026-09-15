@@ -1,0 +1,44 @@
+{
+  "id": "com.patrick.brugopen",
+  "name": {
+    "en": "Bridge Open",
+    "nl": "Brug Open"
+  },
+  "description": {
+    "en": "Know when a bridge may interrupt your route.",
+    "nl": "Weet wanneer een brug je route kan onderbreken."
+  },
+  "author": {
+    "name": "Patrick"
+  },
+  "version": "1.0.0",
+  "compatibility": ">=7.4.0",
+  "sdk": 3,
+  "category": "tools",
+  "platforms": [
+    "local"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "runtime": "nodejs",
+  "brandColor": "#0F667E",
+  "tags": {
+    "en": [
+      "bridge",
+      "traffic",
+      "NDW",
+      "Netherlands",
+      "Flow"
+    ],
+    "nl": [
+      "brug",
+      "verkeer",
+      "NDW",
+      "Nederland",
+      "Flow"
+    ]
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "_comment": "Generated file. Edit .homeycompose and *.compose.json sources instead.",
+  "id": "com.patrick.brugopen",
+  "name": {
+    "en": "Bridge Open",
+    "nl": "Brug Open"
+  },
+  "description": {
+    "en": "Know when a bridge may interrupt your route.",
+    "nl": "Weet wanneer een brug je route kan onderbreken."
+  },
+  "author": {
+    "name": "Patrick"
+  },
+  "version": "1.0.0",
+  "compatibility": ">=7.4.0",
+  "sdk": 3,
+  "category": "tools",
+  "platforms": [
+    "local"
+  ],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "runtime": "nodejs",
+  "brandColor": "#0F667E",
+  "tags": {
+    "en": [
+      "bridge",
+      "traffic",
+      "NDW",
+      "Netherlands",
+      "Flow"
+    ],
+    "nl": [
+      "brug",
+      "verkeer",
+      "NDW",
+      "Nederland",
+      "Flow"
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Bridge",
+        "nl": "Brug"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "bridge_status",
+        "bridge_open_state",
+        "bridge_next_opening",
+        "bridge_last_check",
+        "bridge_data_status"
+      ],
+      "images": {
+        "small": "/drivers/bridge/assets/images/small.png",
+        "large": "/drivers/bridge/assets/images/large.png",
+        "xlarge": "/drivers/bridge/assets/images/xlarge.png"
+      },
+      "platforms": [
+        "local"
+      ],
+      "pair": [
+        {
+          "id": "search_bridge"
+        }
+      ],
+      "id": "bridge",
+      "icon": "/drivers/bridge/assets/icon.svg"
+    }
+  ],
+  "flow": {
+    "triggers": [
+      {
+        "id": "bridge_closed"
+      },
+      {
+        "id": "bridge_opened"
+      },
+      {
+        "id": "bridge_planned"
+      },
+      {
+        "id": "bridge_status_changed"
+      }
+    ],
+    "conditions": [
+      {
+        "id": "bridge_is_closed"
+      },
+      {
+        "id": "bridge_is_open"
+      },
+      {
+        "id": "bridge_is_planned"
+      },
+      {
+        "id": "bridge_status_is"
+      }
+    ],
+    "actions": [
+      {
+        "id": "refresh_bridge_status"
+      }
+    ]
+  },
+  "capabilities": {
+    "bridge_data_status": {
+      "type": "enum",
+      "title": {
+        "en": "Data status",
+        "nl": "Datastatus"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "values": [
+        {
+          "id": "ok",
+          "title": {
+            "en": "Up to date",
+            "nl": "Actueel"
+          }
+        },
+        {
+          "id": "error",
+          "title": {
+            "en": "Temporarily unavailable",
+            "nl": "Tijdelijk niet bereikbaar"
+          }
+        },
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Waiting for data",
+            "nl": "Wachten op data"
+          }
+        },
+        {
+          "id": "coverage_unknown",
+          "title": {
+            "en": "Coverage unknown",
+            "nl": "Dekking onbekend"
+          }
+        }
+      ],
+      "icon": "/assets/icons/data.svg"
+    },
+    "bridge_last_check": {
+      "type": "string",
+      "title": {
+        "en": "Last NDW check",
+        "nl": "Laatste NDW-controle"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/refresh.svg"
+    },
+    "bridge_next_opening": {
+      "type": "string",
+      "title": {
+        "en": "Next opening",
+        "nl": "Volgende opening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_open_state": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge open",
+        "nl": "Brug open"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "no",
+          "title": {
+            "en": "No",
+            "nl": "Nee"
+          }
+        },
+        {
+          "id": "yes",
+          "title": {
+            "en": "Yes",
+            "nl": "Ja"
+          }
+        }
+      ],
+      "icon": "/assets/icons/bridge-open.svg"
+    },
+    "bridge_status": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge status",
+        "nl": "Brugstatus"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "planned",
+          "title": {
+            "en": "Announced",
+            "nl": "Aangekondigd"
+          }
+        },
+        {
+          "id": "open",
+          "title": {
+            "en": "Open",
+            "nl": "Open"
+          }
+        },
+        {
+          "id": "closed",
+          "title": {
+            "en": "Closed",
+            "nl": "Dicht"
+          }
+        }
+      ],
+      "icon": "/assets/icons/bridge.svg"
+    }
+  }
+}

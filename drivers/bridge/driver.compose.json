@@ -1,0 +1,27 @@
+{
+  "name": {
+    "en": "Bridge",
+    "nl": "Brug"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "bridge_status",
+    "bridge_open_state",
+    "bridge_next_opening",
+    "bridge_last_check",
+    "bridge_data_status"
+  ],
+  "images": {
+    "small": "/drivers/bridge/assets/images/small.png",
+    "large": "/drivers/bridge/assets/images/large.png",
+    "xlarge": "/drivers/bridge/assets/images/xlarge.png"
+  },
+  "platforms": [
+    "local"
+  ],
+  "pair": [
+    {
+      "id": "search_bridge"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "bridge_status_is",
+  "title": {
+    "en": "Bridge status is...",
+    "nl": "Brugstatus is..."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    },
+    {
+      "name": "status",
+      "type": "dropdown",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "planned",
+          "title": {
+            "en": "Announced",
+            "nl": "Aangekondigd"
+          }
+        },
+        {
+          "id": "open",
+          "title": {
+            "en": "Open",
+            "nl": "Open"
+          }
+        },
+        {
+          "id": "closed",
+          "title": {
+            "en": "Closed",
+            "nl": "Dicht"
+          }
+        }
+      ]
+    }
+  ],
+  "titleFormatted": {
+    "en": "Bridge status is [[status]]",
+    "nl": "Brugstatus is [[status]]"
+  }
+}

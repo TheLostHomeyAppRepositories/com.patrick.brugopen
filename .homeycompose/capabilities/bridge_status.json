@@ -1,0 +1,42 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Bridge status",
+    "nl": "Brugstatus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true,
+  "values": [
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Unknown",
+        "nl": "Onbekend"
+      }
+    },
+    {
+      "id": "planned",
+      "title": {
+        "en": "Announced",
+        "nl": "Aangekondigd"
+      }
+    },
+    {
+      "id": "open",
+      "title": {
+        "en": "Open",
+        "nl": "Open"
+      }
+    },
+    {
+      "id": "closed",
+      "title": {
+        "en": "Closed",
+        "nl": "Dicht"
+      }
+    }
+  ],
+  "icon": "/assets/icons/bridge.svg"
+}

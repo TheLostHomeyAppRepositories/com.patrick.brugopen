@@ -1,0 +1,56 @@
+{
+  "id": "bridge_closed",
+  "title": {
+    "en": "Bridge closed",
+    "nl": "Brug gesloten"
+  },
+  "hint": {
+    "en": "Triggers when the bridge becomes available to road traffic again.",
+    "nl": "Start wanneer de brug weer beschikbaar is voor wegverkeer."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      }
+    },
+    {
+      "name": "status_id",
+      "type": "string",
+      "title": {
+        "en": "Status ID",
+        "nl": "Status-ID"
+      }
+    },
+    {
+      "name": "ended_at",
+      "type": "string",
+      "title": {
+        "en": "Ended at",
+        "nl": "Gesloten om"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

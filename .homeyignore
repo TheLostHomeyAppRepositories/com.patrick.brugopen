@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+tests
+scripts
+store_assets
+*.zip
+build_brugopen.py
+CERTIFICATION_NOTES*.md
+DATA_SOURCES.md
+RELEASE_NOTES*.md
+TESTPLAN*.md
+README.md

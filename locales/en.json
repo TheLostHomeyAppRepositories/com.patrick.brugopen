@@ -1,0 +1,31 @@
+{
+  "pair": {
+    "title": "Find bridge",
+    "intro": "Enter a bridge name or city and press Search. Only movable bridges are requested.",
+    "placeholder": "For example Botlek, Spijkenisse or Erasmusbrug",
+    "search": "Search",
+    "searching": "Searching bridges…",
+    "min_chars": "Enter at least 2 characters.",
+    "no_results": "No matching movable bridge found.",
+    "add": "Add",
+    "adding": "Adding bridge…",
+    "already_paired": "Already added",
+    "search_failed": "Search failed. Please try again.",
+    "pair_failed": "The bridge could not be added.",
+    "missing_selection": "The selected bridge is no longer available. Search again.",
+    "unknown_city": "City unknown"
+  },
+  "status": {
+    "unknown": "Unknown",
+    "planned": "Announced",
+    "open": "Open",
+    "closed": "Closed"
+  },
+  "values": {
+    "none": "—"
+  },
+  "errors": {
+    "no_device": "No bridge selected.",
+    "refresh_failed": "NDW could not be refreshed."
+  }
+}

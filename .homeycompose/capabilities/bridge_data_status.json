@@ -1,0 +1,42 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Data status",
+    "nl": "Datastatus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "values": [
+    {
+      "id": "ok",
+      "title": {
+        "en": "Up to date",
+        "nl": "Actueel"
+      }
+    },
+    {
+      "id": "error",
+      "title": {
+        "en": "Temporarily unavailable",
+        "nl": "Tijdelijk niet bereikbaar"
+      }
+    },
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Waiting for data",
+        "nl": "Wachten op data"
+      }
+    },
+    {
+      "id": "coverage_unknown",
+      "title": {
+        "en": "Coverage unknown",
+        "nl": "Dekking onbekend"
+      }
+    }
+  ],
+  "icon": "/assets/icons/data.svg"
+}

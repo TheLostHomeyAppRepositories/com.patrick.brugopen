@@ -1,0 +1,22 @@
+{
+  "id": "refresh_bridge_status",
+  "title": {
+    "en": "Refresh bridge status",
+    "nl": "Brugstatus verversen"
+  },
+  "hint": {
+    "en": "Immediately checks the NDW bridge feed.",
+    "nl": "Controleert direct de NDW-bruggenfeed."
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

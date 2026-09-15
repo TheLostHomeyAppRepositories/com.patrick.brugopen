@@ -1,0 +1,64 @@
+{
+  "id": "bridge_opened",
+  "title": {
+    "en": "Bridge opened",
+    "nl": "Brug geopend"
+  },
+  "hint": {
+    "en": "Triggers when NDW reports that road traffic can no longer pass the bridge.",
+    "nl": "Start wanneer NDW meldt dat wegverkeer de brug niet meer kan passeren."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      }
+    },
+    {
+      "name": "status_id",
+      "type": "string",
+      "title": {
+        "en": "Status ID",
+        "nl": "Status-ID"
+      }
+    },
+    {
+      "name": "started_at",
+      "type": "string",
+      "title": {
+        "en": "Started at",
+        "nl": "Gestart om"
+      }
+    },
+    {
+      "name": "expected_end",
+      "type": "string",
+      "title": {
+        "en": "Expected end",
+        "nl": "Verwacht einde"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "bridge_is_planned",
+  "title": {
+    "en": "Opening is announced",
+    "nl": "Opening is aangekondigd"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}
