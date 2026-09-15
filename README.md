@@ -1,37 +1,65 @@
-# Brug Open — Homey app
+# Brug Open
 
-Homey SDK 3 app for Dutch bridge-opening status, using Rijkswaterstaat FIS/ISRS for pairing plus two NDW DATEX II feeds: the planning feed for announcements and the temporary-closures feed for faster live open/closed status.
+![Brug Open](assets/images/xlarge.png)
 
-## Architecture
+Met **Brug Open** kun je beweegbare bruggen in Nederland toevoegen aan Homey.  
+Je ziet of een brug open of dicht is en, wanneer beschikbaar, wanneer de volgende opening gepland staat.
 
-- One Homey device per selected bridge.
-- Pairing does not download the complete bridge catalogue. After the user presses **Search**, the Rijkswaterstaat OGC Features API is queried server-side for a small set of movable bridge candidates by bridge name/place.
-- Search results are ranked locally, but the stable RIS/ISRS code is resolved only after the user selects one bridge. This keeps CPU, memory and network load low on Homey.
-- FIS bridge data supplies bridge name, city, coordinates and numeric `isrsid`; the ISRS object layer resolves that single selected ID to the stable RIS/ISRS `code` used for NDW matching.
-- One central NDW service is shared by all bridge devices. It checks `tijdelijke_verkeersmaatregelen_afsluitingen.xml.gz` every 15 seconds for current bridge closures and `planningsfeed_brugopeningen.xml.gz` every 60 seconds for announcements/planning.
-- DATEX II bridge lifecycle is normalized to `unknown`, `planned`, `open`, `closed`.
-- Network errors never turn a bridge into `closed`.
-- In the current-closures feed, a previously observed open bridge disappearing from a successful new snapshot is treated as closed immediately. Planning-feed disappearance remains conservative and requires two successful snapshots.
-- The first successful sync after a Homey/app restart updates the tile without firing a false Flow trigger.
+De app gebruikt openbare gegevens van **NDW** en **Rijkswaterstaat**.
 
-## Flow
+## Wat kun je ermee?
 
-Triggers: bridge opened, bridge closed, opening announced, status changed. Conditions: open, closed, announced, status equals. Action: refresh bridge status.
+Per brug zie je in Homey:
 
-## Development
+- **Brugstatus** — Open, Dicht, Aangekondigd of Onbekend
+- **Brug open** — Ja, Nee of Onbekend
+- **Volgende opening** — als deze door NDW wordt doorgegeven
+- **Laatste NDW-controle**
+- **Datastatus**
 
-```bash
-npm test
-homey app validate
-homey app install
-```
+## Een brug toevoegen
 
-The generated root `app.json` is not the source of truth. Edit `.homeycompose/app.json`, `.homeycompose/flow/*`, `.homeycompose/capabilities/*` and `drivers/bridge/driver.compose.json`, then run `npm run generate:manifest`.
+1. Open Homey.
+2. Ga naar **Apparaten**.
+3. Kies **Nieuw apparaat**.
+4. Kies **Brug Open**.
+5. Typ de naam of plaats van de brug.
+6. Kies de juiste brug uit de zoekresultaten.
 
-## Data sources
+De brug wordt daarna als een eigen apparaat aan Homey toegevoegd.
 
-NDW Open Data:
-- `https://opendata.ndw.nu/tijdelijke_verkeersmaatregelen_afsluitingen.xml.gz`
-- `https://opendata.ndw.nu/planningsfeed_brugopeningen.xml.gz`
+## Flows
 
-Rijkswaterstaat FIS/VNDS OGC Features API: `https://geo.rijkswaterstaat.nl/services/ogc/gdr/fis_vnds/ogc/features/v1`
+Je kunt Brug Open gebruiken in Homey Flows.
+
+### Wanneer
+
+- Brug geopend
+- Brug gesloten
+- Opening aangekondigd
+- Brugstatus gewijzigd
+
+### En
+
+- Brug is open
+- Brug is dicht
+- Opening is aangekondigd
+- Brugstatus is...
+
+### Dan
+
+- Brugstatus verversen
+
+Zo kun je bijvoorbeeld een melding krijgen wanneer een brug op je route opent of wanneer een aangekondigde opening bekend wordt.
+
+## Beschikbaarheid van gegevens
+
+De app is afhankelijk van de gegevens die NDW en Rijkswaterstaat beschikbaar stellen.
+
+Niet voor iedere brug is altijd een geplande opening bekend.  
+Bij een tijdelijke storing blijft de laatst bekende status behouden totdat nieuwe gegevens beschikbaar zijn.
+
+## Privacy
+
+Brug Open gebruikt geen account en vraagt geen persoonlijke gegevens.  
+De app leest alleen openbare brug- en verkeersgegevens.
