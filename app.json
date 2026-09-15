@@ -42,6 +42,11 @@
       "Flow"
     ]
   },
+  "support": "https://github.com/glijie/brug-open-homey/issues",
+  "bugs": {
+    "url": "https://github.com/glijie/brug-open-homey/issues"
+  },
+  "source": "https://github.com/glijie/brug-open-homey",
   "drivers": [
     {
       "name": {

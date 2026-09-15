@@ -2,8 +2,7 @@
 
 ![Brug Open](assets/images/xlarge.png)
 
-Met **Brug Open** kun je beweegbare bruggen in Nederland toevoegen aan Homey.  
-Je ziet of een brug open of dicht is en, wanneer beschikbaar, wanneer de volgende opening gepland staat.
+Met **Brug Open** kun je bruggen in Nederland toevoegen aan Homey. Je ziet of een brug open of dicht is en, wanneer beschikbaar, wanneer de volgende opening gepland staat.
 
 De app gebruikt openbare gegevens van **NDW** en **Rijkswaterstaat**.
 
@@ -30,7 +29,7 @@ De brug wordt daarna als een eigen apparaat aan Homey toegevoegd.
 
 ## Flows
 
-Je kunt Brug Open gebruiken in Homey Flows.
+Brug Open kan worden gebruikt in Homey Flows.
 
 ### Wanneer
 
@@ -50,16 +49,18 @@ Je kunt Brug Open gebruiken in Homey Flows.
 
 - Brugstatus verversen
 
-Zo kun je bijvoorbeeld een melding krijgen wanneer een brug op je route opent of wanneer een aangekondigde opening bekend wordt.
+Zo kun je bijvoorbeeld een melding krijgen wanneer een brug opent of wanneer een aangekondigde opening bekend wordt.
 
 ## Beschikbaarheid van gegevens
 
-De app is afhankelijk van de gegevens die NDW en Rijkswaterstaat beschikbaar stellen.
+De app is afhankelijk van de gegevens die NDW en Rijkswaterstaat beschikbaar stellen. Niet voor iedere brug is altijd een geplande opening bekend.
 
-Niet voor iedere brug is altijd een geplande opening bekend.  
 Bij een tijdelijke storing blijft de laatst bekende status behouden totdat nieuwe gegevens beschikbaar zijn.
 
 ## Privacy
 
-Brug Open gebruikt geen account en vraagt geen persoonlijke gegevens.  
-De app leest alleen openbare brug- en verkeersgegevens.
+Brug Open gebruikt geen account en vraagt geen persoonlijke gegevens. De app leest alleen openbare brug- en verkeersgegevens.
+
+## Ondersteuning
+
+Heb je een probleem of een vraag? Meld deze via [GitHub Issues](https://github.com/glijie/brug-open-homey/issues).
