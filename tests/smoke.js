@@ -459,7 +459,7 @@ function testRealtimeFeedConfiguration() {
 
 function testStoreReadinessText() {
   const compose = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'app.json'), 'utf8'));
-  assert.strictEqual(compose.version, '1.0.2');
+  assert.strictEqual(compose.version, '1.0.3');
   assert.strictEqual(compose.description.nl, 'Weet wanneer een brug je route kan onderbreken.');
   assert.strictEqual(compose.description.en, 'Know when a bridge may interrupt your route.');
   const flowCondition = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'flow', 'conditions', 'bridge_status_is.json'), 'utf8'));

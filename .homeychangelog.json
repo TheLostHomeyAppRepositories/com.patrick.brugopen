@@ -10,5 +10,9 @@
   "1.0.2": {
     "en": "Nationwide bridge search improved using Rijkswaterstaat bridge, opening and ISRS names, with PDOK/Kadaster as a public-name fallback.",
     "nl": "Landelijk brug zoeken verbeterd met Rijkswaterstaat brug-, doorvaartopening- en ISRS-namen, met PDOK/Kadaster als vangnet voor publieksnamen."
+  },
+  "1.0.3": {
+    "en": "App Store image updated.",
+    "nl": "App Store-afbeelding vernieuwd."
   }
 }
