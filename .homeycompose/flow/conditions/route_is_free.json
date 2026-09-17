@@ -1,0 +1,18 @@
+{
+  "id": "route_is_free",
+  "title": {
+    "en": "Route is free",
+    "nl": "Route is vrij"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "id": "compare_routes",
+  "title": {
+    "en": "Compare two bridge routes",
+    "nl": "Twee brugroutes vergelijken"
+  },
+  "titleFormatted": {
+    "en": "Compare this route with [[route_b]]",
+    "nl": "Vergelijk deze route met [[route_b]]"
+  },
+  "hint": {
+    "en": "Returns bridge status and only bridge-opening-caused traffic impact for both routes without choosing a route.",
+    "nl": "Geeft brugstatus en alleen verkeersgevolgen door brugopeningen voor beide routes terug, zonder een route te kiezen."
+  },
+  "tokens": [
+    {
+      "name": "route_a_name",
+      "type": "string",
+      "title": {
+        "en": "Route A",
+        "nl": "Route A"
+      }
+    },
+    {
+      "name": "route_a_status",
+      "type": "string",
+      "title": {
+        "en": "Route A status",
+        "nl": "Status route A"
+      }
+    },
+    {
+      "name": "route_a_status_id",
+      "type": "string",
+      "title": {
+        "en": "Route A status ID",
+        "nl": "Status-ID route A"
+      }
+    },
+    {
+      "name": "route_a_traffic",
+      "type": "string",
+      "title": {
+        "en": "Route A bridge-opening impact",
+        "nl": "Gevolg brugopening route A"
+      }
+    },
+    {
+      "name": "route_a_traffic_id",
+      "type": "string",
+      "title": {
+        "en": "Route A bridge-opening impact ID",
+        "nl": "Gevolg brugopening-ID route A"
+      }
+    },
+    {
+      "name": "route_a_open_bridges",
+      "type": "number",
+      "title": {
+        "en": "Open bridges on route A",
+        "nl": "Open bruggen route A"
+      }
+    },
+    {
+      "name": "route_a_blockages_today",
+      "type": "number",
+      "title": {
+        "en": "Blockages today on route A",
+        "nl": "Blokkades vandaag route A"
+      }
+    },
+    {
+      "name": "route_b_name",
+      "type": "string",
+      "title": {
+        "en": "Route B",
+        "nl": "Route B"
+      }
+    },
+    {
+      "name": "route_b_status",
+      "type": "string",
+      "title": {
+        "en": "Route B status",
+        "nl": "Status route B"
+      }
+    },
+    {
+      "name": "route_b_status_id",
+      "type": "string",
+      "title": {
+        "en": "Route B status ID",
+        "nl": "Status-ID route B"
+      }
+    },
+    {
+      "name": "route_b_traffic",
+      "type": "string",
+      "title": {
+        "en": "Route B bridge-opening impact",
+        "nl": "Gevolg brugopening route B"
+      }
+    },
+    {
+      "name": "route_b_traffic_id",
+      "type": "string",
+      "title": {
+        "en": "Route B bridge-opening impact ID",
+        "nl": "Gevolg brugopening-ID route B"
+      }
+    },
+    {
+      "name": "route_b_open_bridges",
+      "type": "number",
+      "title": {
+        "en": "Open bridges on route B",
+        "nl": "Open bruggen route B"
+      }
+    },
+    {
+      "name": "route_b_blockages_today",
+      "type": "number",
+      "title": {
+        "en": "Blockages today on route B",
+        "nl": "Blokkades vandaag route B"
+      }
+    },
+    {
+      "name": "comparison_summary",
+      "type": "string",
+      "title": {
+        "en": "Factual comparison",
+        "nl": "Feitelijke vergelijking"
+      }
+    },
+    {
+      "name": "route_a_queue_length_km",
+      "type": "number",
+      "title": {
+        "en": "Route A bridge-opening queue (km)",
+        "nl": "Route A file door brugopening (km)"
+      }
+    },
+    {
+      "name": "route_a_aftermath",
+      "type": "string",
+      "title": {
+        "en": "Route A recovery duration",
+        "nl": "Route A afwikkeltijd"
+      }
+    },
+    {
+      "name": "route_b_queue_length_km",
+      "type": "number",
+      "title": {
+        "en": "Route B bridge-opening queue (km)",
+        "nl": "Route B file door brugopening (km)"
+      }
+    },
+    {
+      "name": "route_b_aftermath",
+      "type": "string",
+      "title": {
+        "en": "Route B recovery duration",
+        "nl": "Route B afwikkeltijd"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "route_a",
+      "type": "device",
+      "title": {
+        "en": "Route A",
+        "nl": "Route A"
+      },
+      "filter": "driver_id=route"
+    },
+    {
+      "name": "route_b",
+      "type": "device",
+      "title": {
+        "en": "Route B",
+        "nl": "Route B"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

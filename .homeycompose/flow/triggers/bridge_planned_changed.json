@@ -1,0 +1,64 @@
+{
+  "id": "bridge_planned_changed",
+  "title": {
+    "en": "Announced opening changed",
+    "nl": "Aangekondigde opening gewijzigd"
+  },
+  "hint": {
+    "en": "Triggers when NDW changes the time of a future announced opening.",
+    "nl": "Start wanneer NDW de tijd van een toekomstige aangekondigde opening wijzigt."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "old_planned_start",
+      "type": "string",
+      "title": {
+        "en": "Old planned start",
+        "nl": "Oude geplande start"
+      }
+    },
+    {
+      "name": "old_planned_end",
+      "type": "string",
+      "title": {
+        "en": "Old planned end",
+        "nl": "Oud gepland einde"
+      }
+    },
+    {
+      "name": "new_planned_start",
+      "type": "string",
+      "title": {
+        "en": "New planned start",
+        "nl": "Nieuwe geplande start"
+      }
+    },
+    {
+      "name": "new_planned_end",
+      "type": "string",
+      "title": {
+        "en": "New planned end",
+        "nl": "Nieuw gepland einde"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

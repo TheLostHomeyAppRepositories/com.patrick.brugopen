@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Announced openings",
+    "nl": "Aangekondigde openingen"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "decimals": 0,
+  "min": 0,
+  "icon": "/assets/icons/clock.svg"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "bridge_open_longer_than",
+  "title": {
+    "en": "Bridge has been open for at least...",
+    "nl": "Brug is langer dan... open"
+  },
+  "titleFormatted": {
+    "en": "Bridge has been open for at least [[minutes]] minutes",
+    "nl": "Brug is langer dan [[minutes]] minuten open"
+  },
+  "hint": {
+    "en": "Triggers once when the current opening crosses the selected duration.",
+    "nl": "Start één keer zodra de huidige opening de gekozen duur passeert."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": { "en": "Bridge", "nl": "Brug" }
+    },
+    {
+      "name": "open_duration",
+      "type": "string",
+      "title": { "en": "Opening duration", "nl": "Openingsduur" }
+    },
+    {
+      "name": "open_duration_seconds",
+      "type": "number",
+      "title": { "en": "Opening duration in seconds", "nl": "Openingsduur in seconden" }
+    },
+    {
+      "name": "started_at",
+      "type": "string",
+      "title": { "en": "Started at", "nl": "Gestart om" }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": { "en": "Device", "nl": "Apparaat" },
+      "filter": "driver_id=bridge"
+    },
+    {
+      "name": "minutes",
+      "type": "number",
+      "title": { "en": "Minutes", "nl": "Minuten" },
+      "min": 1,
+      "max": 180,
+      "step": 1
+    }
+  ]
+}

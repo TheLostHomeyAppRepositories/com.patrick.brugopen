@@ -13,7 +13,11 @@
     "search_failed": "Zoeken is mislukt. Probeer het opnieuw.",
     "pair_failed": "De brug kon niet worden toegevoegd.",
     "missing_selection": "De geselecteerde brug is niet meer beschikbaar. Zoek opnieuw.",
-    "unknown_city": "Plaats onbekend"
+    "unknown_city": "Plaats onbekend",
+    "nearby": "Bruggen dichtbij",
+    "nearby_searching": "Bruggen dichtbij Homey zoeken…",
+    "nearby_failed": "Bruggen dichtbij konden niet worden opgehaald.",
+    "location_unavailable": "De locatie van Homey is niet beschikbaar."
   },
   "status": {
     "unknown": "Onbekend",
@@ -26,6 +30,97 @@
   },
   "errors": {
     "no_device": "Geen brug geselecteerd.",
-    "refresh_failed": "NDW kon niet worden ververst."
+    "refresh_failed": "NDW kon niet worden ververst.",
+    "route_scan_failed": "De route kon niet worden gecontroleerd.",
+    "route_compare_failed": "De routes konden niet worden vergeleken.",
+    "location_unavailable": "De locatie van Homey is niet beschikbaar.",
+    "route_not_found": "De route is niet gevonden.",
+    "route_update_failed": "De route kon niet worden bijgewerkt."
+  },
+  "planning": {
+    "waiting": "Wachten op data",
+    "none": "Geen aankondiging",
+    "support_unknown": "Ondersteuning onbekend",
+    "unavailable": "Planning niet bereikbaar",
+    "traffic_waiting": "Wachten op file-impact",
+    "traffic_unknown": "File-impact onbekend",
+    "traffic_unavailable": "File-impact tijdelijk niet bereikbaar"
+  },
+  "route_pair": {
+    "title": "Brugroute maken",
+    "intro": "Geef de route een naam en kies de bruggen die je onderweg wilt bewaken. Voeg eerst losse bruggen toe aan Homey.",
+    "placeholder": "Bijvoorbeeld Route werk",
+    "loading": "Bruggen laden…",
+    "none": "Nog geen bruggen toegevoegd. Voeg eerst minimaal één brug toe.",
+    "add": "Route toevoegen",
+    "adding": "Route toevoegen…",
+    "load_failed": "De bruggen konden niet worden geladen.",
+    "failed": "De route kon niet worden toegevoegd.",
+    "name_required": "Geef de route een naam.",
+    "bridge_required": "Selecteer minimaal één brug.",
+    "bridge_missing": "Een geselecteerde brug is niet meer beschikbaar.",
+    "already_exists": "Deze route bestaat al."
+  },
+  "route": {
+    "waiting": "Wachten op brugdata",
+    "no_announcement": "Geen aankondiging",
+    "free": "Alle bruggen op deze route zijn dicht.",
+    "blocked_one": "Geblokkeerd: {bridge} is open.",
+    "blocked_many": "Geblokkeerd: {count} bruggen zijn open.",
+    "uncertain": "Status onzeker: geen betrouwbare actuele data voor {bridge}.",
+    "announced": "Route is nu vrij; opening aangekondigd bij {bridge} om {time}.",
+    "traffic_waiting": "Wachten op file-impact",
+    "traffic_clear": "Geen file door een brugopening op deze route.",
+    "traffic_unknown": "File-impact voor deze route is niet volledig beschikbaar.",
+    "traffic_queue": "File door brugopening bij",
+    "traffic_residual": "Nasleep van brugopening bij"
+  },
+  "route_status": {
+    "unknown": "Data onzeker",
+    "free": "Vrij",
+    "announced": "Opening aangekondigd",
+    "blocked": "Geblokkeerd"
+  },
+  "traffic_status": {
+    "unknown": "Onbekend",
+    "clear": "Geen file door brugopening",
+    "queue": "File door brugopening",
+    "residual": "Nasleep na brugopening"
+  },
+  "settings": {
+    "title": "Brug Open Control Center",
+    "subtitle": "Live bruggen, routes, historie en databronnen in één overzicht.",
+    "refresh": "Alles verversen",
+    "reload": "Overzicht herladen",
+    "overview": "Overzicht",
+    "bridges": "Bruggen",
+    "routes": "Routes",
+    "nearby": "Bruggen dichtbij Homey",
+    "nearby_button": "Zoek bruggen dichtbij",
+    "diagnostics": "Diagnose",
+    "loading": "Laden…",
+    "saved": "Opgeslagen.",
+    "none": "Geen gegevens",
+    "edit_route": "Bruggen beheren",
+    "save_route": "Route opslaan",
+    "history": "Historie & patroon",
+    "route_measurement": "Lokale routeblokkades sinds",
+    "bridge_measurement": "Lokale openingen sinds",
+    "current": "Actueel",
+    "bridge_count": "Bruggen",
+    "route_count": "Routes",
+    "open_now": "Nu open",
+    "blocked_routes": "Geblokkeerde routes",
+    "bridge_status": "Brugstatus",
+    "next_opening": "Volgende opening",
+    "open_duration": "Openingsduur",
+    "traffic": "Gevolg brugopening",
+    "route_status": "Routestatus",
+    "blockages_today": "Blokkades vandaag",
+    "blocked_time_today": "Blokkadetijd vandaag",
+    "refreshing": "Bronnen verversen…",
+    "refreshed": "Verversing voltooid.",
+    "queue_length": "Filelengte door opening",
+    "aftermath": "Afwikkeltijd na sluiten"
   }
 }

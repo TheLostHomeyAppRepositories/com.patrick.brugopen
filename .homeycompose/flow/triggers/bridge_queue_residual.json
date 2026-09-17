@@ -1,0 +1,112 @@
+{
+  "id": "bridge_queue_residual",
+  "title": {
+    "en": "Bridge closed but queue remains",
+    "nl": "Brug dicht maar file staat er nog"
+  },
+  "hint": {
+    "en": "Triggers when the bridge has closed while the queue caused by that opening is still present.",
+    "nl": "Start wanneer de brug dicht is maar de file door die opening nog aanwezig is."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "impact_status",
+      "type": "string",
+      "title": {
+        "en": "Impact status",
+        "nl": "Impactstatus"
+      }
+    },
+    {
+      "name": "impact_status_id",
+      "type": "string",
+      "title": {
+        "en": "Impact status ID",
+        "nl": "Impactstatus-ID"
+      }
+    },
+    {
+      "name": "queue_length_km",
+      "type": "number",
+      "title": {
+        "en": "Queue length (km)",
+        "nl": "Filelengte (km)"
+      }
+    },
+    {
+      "name": "queue_length_meters",
+      "type": "number",
+      "title": {
+        "en": "Queue length (m)",
+        "nl": "Filelengte (m)"
+      }
+    },
+    {
+      "name": "aftermath_duration",
+      "type": "string",
+      "title": {
+        "en": "Recovery duration",
+        "nl": "Afwikkeltijd"
+      }
+    },
+    {
+      "name": "aftermath_seconds",
+      "type": "number",
+      "title": {
+        "en": "Recovery duration in seconds",
+        "nl": "Afwikkeltijd in seconden"
+      }
+    },
+    {
+      "name": "road",
+      "type": "string",
+      "title": {
+        "en": "Road",
+        "nl": "Weg"
+      }
+    },
+    {
+      "name": "summary",
+      "type": "string",
+      "title": {
+        "en": "Summary",
+        "nl": "Samenvatting"
+      }
+    },
+    {
+      "name": "previous_impact_status",
+      "type": "string",
+      "title": {
+        "en": "Previous impact status",
+        "nl": "Vorige impactstatus"
+      }
+    },
+    {
+      "name": "previous_impact_status_id",
+      "type": "string",
+      "title": {
+        "en": "Previous impact status ID",
+        "nl": "Vorige impactstatus-ID"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

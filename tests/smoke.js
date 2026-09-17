@@ -440,7 +440,7 @@ function testBridgeOpenIndicatorCapability() {
   assert(!driver.capabilities.includes('alarm_generic'), 'Legacy opening alarm must not be in the driver');
   assert(!driver.capabilitiesOptions || !driver.capabilitiesOptions.alarm_generic, 'Legacy opening alarm options must be removed');
   const deviceCode = fs.readFileSync(path.join(root, 'drivers', 'bridge', 'device.js'), 'utf8');
-  assert(deviceCode.includes("bridge_open_state:'unknown'"));
+  assert(deviceCode.includes("bridge_open_state: 'unknown'"));
   assert(deviceCode.includes("status === 'open') return 'yes'"));
   assert(deviceCode.includes("status === 'closed' || status === 'planned') return 'no'"));
   assert(deviceCode.includes("removeCapability('alarm_generic')"), 'Existing devices must remove the legacy opening alarm');
@@ -459,7 +459,7 @@ function testRealtimeFeedConfiguration() {
 
 function testStoreReadinessText() {
   const compose = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'app.json'), 'utf8'));
-  assert.strictEqual(compose.version, '1.0.3');
+  assert.strictEqual(compose.version, '1.1.2');
   assert.strictEqual(compose.description.nl, 'Weet wanneer een brug je route kan onderbreken.');
   assert.strictEqual(compose.description.en, 'Know when a bridge may interrupt your route.');
   const flowCondition = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'flow', 'conditions', 'bridge_status_is.json'), 'utf8'));
@@ -472,6 +472,155 @@ function testStoreReadinessText() {
   }
   const ignore = fs.readFileSync(path.join(root, '.homeyignore'), 'utf8');
   for (const pattern of ['CERTIFICATION_NOTES*.md', 'RELEASE_NOTES*.md', 'TESTPLAN*.md', 'README.md']) assert(ignore.includes(pattern));
+}
+
+
+function testV110CapabilitiesAndFlows() {
+  const driver = JSON.parse(fs.readFileSync(path.join(root, 'drivers', 'bridge', 'driver.compose.json'), 'utf8'));
+  for (const cap of ['bridge_open_since', 'bridge_open_duration', 'bridge_last_open_duration']) {
+    assert(driver.capabilities.includes(cap), `${cap} must be included in the bridge driver`);
+    assert(fs.existsSync(path.join(root, '.homeycompose', 'capabilities', `${cap}.json`)), `${cap} definition missing`);
+  }
+  assert(!driver.capabilities.includes('bridge_data_age'), 'Visible data-age capability must be removed');
+  assert(!fs.existsSync(path.join(root, '.homeycompose', 'capabilities', 'bridge_data_age.json')), 'Data-age capability definition must be removed');
+  const dataStatus = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'capabilities', 'bridge_data_status.json'), 'utf8'));
+  assert(dataStatus.values.some(v => v.id === 'stale'), 'Data status must support stale data');
+
+  for (const id of ['bridge_open_longer_than', 'bridge_planned_within', 'bridge_data_stale']) {
+    const card = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'flow', 'triggers', `${id}.json`), 'utf8'));
+    assert(card.args.some(a => a.type === 'device' && a.filter === 'driver_id=bridge'));
+    assert(card.args.some(a => a.name === 'minutes' && a.type === 'number'));
+  }
+
+  const deviceCode = fs.readFileSync(path.join(root, 'drivers', 'bridge', 'device.js'), 'utf8');
+  assert(deviceCode.includes("triggerBridge('bridge_open_longer_than'"));
+  assert(deviceCode.includes("triggerBridge('bridge_planned_within'"));
+  assert(deviceCode.includes("triggerBridge('bridge_data_stale'"));
+  assert(deviceCode.includes("removeCapability('bridge_data_age')"), 'Existing devices must remove the visible data-age tile');
+  assert(deviceCode.includes("last_successful_current_at"));
+  assert(deviceCode.includes("open_started_at"));
+  assert(deviceCode.includes("if (!this._bootSynced)"), 'Runtime triggers must be suppressed during boot synchronization');
+
+  const feedCode = fs.readFileSync(path.join(root, 'lib', 'bridge_feed_service.js'), 'utf8');
+  assert(feedCode.includes("feedSource: 'current'"));
+  assert(feedCode.includes("feedSource: 'planning'"));
+}
+
+
+function loadWithHomeyStub(rel, classes = {}) {
+  const orig = Module._load;
+  class BaseApp {}
+  class BaseDriver {}
+  class BaseDevice {}
+  Module._load = function(req, parent, isMain) {
+    if (req === 'homey') return {
+      App: classes.App || BaseApp,
+      Driver: classes.Driver || BaseDriver,
+      Device: classes.Device || BaseDevice,
+    };
+    return orig.apply(this, arguments);
+  };
+  try {
+    const resolved = require.resolve(rel);
+    delete require.cache[resolved];
+    return require(rel);
+  } finally {
+    Module._load = orig;
+  }
+}
+
+async function testV110FlowThresholds() {
+  const BrugOpenApp = loadWithHomeyStub('../app');
+  const app = new BrugOpenApp();
+  const cards = new Map();
+  const cardFor = id => {
+    if (!cards.has(id)) cards.set(id, {
+      registerRunListener(fn) { this.listener = fn; return this; },
+      async trigger() { return true; },
+    });
+    return cards.get(id);
+  };
+  app.homey = {
+    flow: {
+      getDeviceTriggerCard: cardFor,
+      getConditionCard: cardFor,
+      getActionCard: cardFor,
+    },
+  };
+  app._registerTriggerCards();
+
+  assert.strictEqual(await cards.get('bridge_open_longer_than').listener({ minutes: 7 }, { previous_seconds: 419, current_seconds: 420 }), true);
+  assert.strictEqual(await cards.get('bridge_open_longer_than').listener({ minutes: 8 }, { previous_seconds: 419, current_seconds: 420 }), false);
+  assert.strictEqual(await cards.get('bridge_planned_within').listener({ minutes: 10 }, { previous_seconds: 601, current_seconds: 596 }), true);
+  assert.strictEqual(await cards.get('bridge_planned_within').listener({ minutes: 5 }, { previous_seconds: 601, current_seconds: 596 }), false);
+  assert.strictEqual(await cards.get('bridge_data_stale').listener({ minutes: 2 }, { previous_seconds: 119, current_seconds: 121 }), true);
+  assert.strictEqual(await cards.get('bridge_data_stale').listener({ minutes: 3 }, { previous_seconds: 119, current_seconds: 121 }), false);
+}
+
+async function testV110DeviceRuntime() {
+  const BridgeDevice = loadWithHomeyStub('../drivers/bridge/device');
+  const device = new BridgeDevice();
+  const caps = new Map([
+    ['bridge_status', 'open'],
+    ['bridge_open_since', '—'],
+    ['bridge_open_duration', '—'],
+    ['bridge_last_open_duration', '—'],
+    ['bridge_data_status', 'ok'],
+    ['bridge_next_opening', '—'],
+  ]);
+  const store = new Map([['bridge_name', 'Testbrug']]);
+  const triggered = [];
+  device.homey = {
+    i18n: { getLanguage: () => 'nl' },
+    clock: { getTimezone: () => 'Europe/Amsterdam' },
+    app: { triggerBridge: async (id, dev, tokens, state) => { triggered.push({ id, tokens, state }); return true; } },
+    __: key => key,
+  };
+  device.getName = () => 'Testbrug';
+  device.hasCapability = key => caps.has(key);
+  device.getCapabilityValue = key => caps.get(key);
+  device.setCapabilityValue = async (key, value) => { caps.set(key, value); };
+  device.getStoreValue = key => store.get(key);
+  device.setStoreValue = async (key, value) => { store.set(key, value); };
+  device._bootSynced = true;
+
+  const now = Date.now();
+  store.set('open_started_at', new Date(now - 300000).toISOString());
+  device._lastOpenDurationSeconds = 299;
+  await device._evaluateOpenDuration(now);
+  assert.strictEqual(triggered.at(-1).id, 'bridge_open_longer_than');
+  assert.strictEqual(triggered.at(-1).state.current_seconds, 300);
+  assert(caps.get('bridge_open_duration').includes('5 min'));
+
+  triggered.length = 0;
+  store.set('planning_start', new Date(now + 600000).toISOString());
+  store.set('planning_end', new Date(now + 660000).toISOString());
+  device._plannedCountdown = null;
+  await device._evaluatePlannedCountdown(now);
+  assert.strictEqual(triggered.at(-1).id, 'bridge_planned_within');
+  assert.strictEqual(triggered.at(-1).tokens.minutes_until, 10);
+
+  const tr = {
+    'planning.waiting': 'Wachten op data',
+    'planning.none': 'Geen aankondiging',
+    'planning.support_unknown': 'Ondersteuning onbekend',
+    'planning.unavailable': 'Planning niet bereikbaar',
+  };
+  device.homey.__ = key => tr[key] || key;
+  store.set('planning_feed_error', false);
+  assert.strictEqual(device._nextOpeningDisplay({ planningState: { planningSnapshotKnown: false, seenInNdw: false } }), 'Wachten op data');
+  assert.strictEqual(device._nextOpeningDisplay({ planningState: { planningSnapshotKnown: true, seenInNdw: false } }), 'Ondersteuning onbekend');
+  assert.strictEqual(device._nextOpeningDisplay({ planningState: { planningSnapshotKnown: true, seenInNdw: true } }), 'Geen aankondiging');
+  store.set('planning_feed_error', true);
+  assert.strictEqual(device._nextOpeningDisplay({ nextOpening: new Date(now + 600000).toISOString(), planningState: { planningSnapshotKnown: true, seenInNdw: true } }), 'Planning niet bereikbaar');
+  store.set('planning_feed_error', false);
+
+  triggered.length = 0;
+  store.set('last_successful_current_at', new Date(now - 60000).toISOString());
+  device._lastDataAgeSeconds = 59;
+  await device._evaluateDataAge(now);
+  assert.strictEqual(triggered.at(-1).id, 'bridge_data_stale');
+  assert.strictEqual(caps.get('bridge_data_status'), 'stale');
 }
 
 function testModuleSyntax() {
@@ -487,6 +636,8 @@ function testModuleSyntax() {
     require('../app');
     require('../drivers/bridge/driver');
     require('../drivers/bridge/device');
+    require('../drivers/route/driver');
+    require('../drivers/route/device');
   } finally {
     Module._load = orig;
   }
@@ -508,8 +659,27 @@ function testModuleSyntax() {
   testRealtimeFeedConfiguration();
   testBridgeOpenIndicatorCapability();
   testStoreReadinessText();
+  testV110CapabilitiesAndFlows();
+  await testV110FlowThresholds();
+  await testV110DeviceRuntime();
   testModuleSyntax();
-  console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted nationwide FIS search, bridge/opening/ISRS name matching, opening-parent and ISRS-name resolution, PDOK public-name fallback, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, Flow titleFormatted, and SDK modules.');
+  
+// Regression: compare_routes uses the first device field as the Flow card device.
+// Homey does not allow that first device argument in titleFormatted; the second
+// device field behaves like an autocomplete argument and must be represented.
+{
+  const compare = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose/flow/actions/compare_routes.json'), 'utf8'));
+  assert.strictEqual(compare.args[0].name, 'route_a');
+  assert.strictEqual(compare.args[0].type, 'device');
+  assert.strictEqual(compare.args[1].name, 'route_b');
+  assert.strictEqual(compare.args[1].type, 'device');
+  for (const lang of ['en', 'nl']) {
+    assert(!compare.titleFormatted[lang].includes('[[route_a]]'), 'first device argument must not be used in titleFormatted');
+    assert(compare.titleFormatted[lang].includes('[[route_b]]'), 'second device argument must be present in titleFormatted');
+  }
+}
+
+console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted nationwide FIS search, bridge/opening/ISRS name matching, opening-parent and ISRS-name resolution, PDOK public-name fallback, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, v1.1.2 duration/countdown/data-watchdog features, explicit planning availability states, removed visible data-age tile, Flow titleFormatted, and SDK modules.');
 })().catch(e => {
   console.error(e);
   process.exit(1);

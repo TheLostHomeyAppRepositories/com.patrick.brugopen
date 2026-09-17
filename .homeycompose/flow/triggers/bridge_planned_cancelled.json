@@ -1,0 +1,48 @@
+{
+  "id": "bridge_planned_cancelled",
+  "title": {
+    "en": "Announced opening cancelled",
+    "nl": "Aangekondigde opening geannuleerd"
+  },
+  "hint": {
+    "en": "Triggers when a future NDW announcement is cancelled or disappears after confirmation.",
+    "nl": "Start wanneer een toekomstige NDW-aankondiging wordt geannuleerd of na bevestiging verdwijnt."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "planned_start",
+      "type": "string",
+      "title": {
+        "en": "Planned start",
+        "nl": "Geplande start"
+      }
+    },
+    {
+      "name": "planned_end",
+      "type": "string",
+      "title": {
+        "en": "Planned end",
+        "nl": "Gepland einde"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Route status",
+    "nl": "Routestatus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true,
+  "values": [
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Data uncertain",
+        "nl": "Data onzeker"
+      }
+    },
+    {
+      "id": "free",
+      "title": {
+        "en": "Free",
+        "nl": "Vrij"
+      }
+    },
+    {
+      "id": "announced",
+      "title": {
+        "en": "Opening announced",
+        "nl": "Opening aangekondigd"
+      }
+    },
+    {
+      "id": "blocked",
+      "title": {
+        "en": "Blocked",
+        "nl": "Geblokkeerd"
+      }
+    }
+  ],
+  "icon": "/assets/icons/route.svg"
+}

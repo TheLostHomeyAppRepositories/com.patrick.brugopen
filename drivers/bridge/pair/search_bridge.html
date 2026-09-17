@@ -8,6 +8,7 @@
     .row { display:flex; gap:8px; }
     input { flex:1; padding:11px; border:1px solid #bbb; border-radius:8px; font-size:16px; }
     button { padding:10px 14px; border:0; border-radius:8px; cursor:pointer; }
+    .nearby { width:100%; margin-top:9px; }
     #status { margin:12px 2px; opacity:.75; min-height:20px; }
     .result { border:1px solid #ddd; border-radius:10px; padding:12px; margin:8px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; }
     .name { font-weight:600; } .meta { font-size:13px; opacity:.7; margin-top:3px; } .paired { opacity:.55; }
@@ -16,33 +17,43 @@
 <body>
   <h2 id="title"></h2><p class="intro" id="intro"></p>
   <div class="row"><input id="query" type="search" autocomplete="off"><button id="search"></button></div>
+  <button id="nearby" class="nearby"></button>
   <div id="status"></div><div id="results"></div>
 <script>
 (function(){
-  const $=id=>document.getElementById(id), q=$('query'), status=$('status'), results=$('results'), search=$('search');
+  const $=id=>document.getElementById(id), q=$('query'), status=$('status'), results=$('results'), search=$('search'), nearby=$('nearby');
   const t=key=>Homey.__(key);
-  $('title').textContent=t('pair.title'); $('intro').textContent=t('pair.intro'); q.placeholder=t('pair.placeholder'); search.textContent=t('pair.search');
+  $('title').textContent=t('pair.title'); $('intro').textContent=t('pair.intro'); q.placeholder=t('pair.placeholder'); search.textContent=t('pair.search'); nearby.textContent=t('pair.nearby');
   function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function distance(m){ if(!Number.isFinite(Number(m)))return ''; const n=Number(m); return n<1000?`${Math.round(n)} m`:`${(n/1000).toFixed(1).replace('.',',')} km`; }
+  function render(list){
+    results.innerHTML=''; status.textContent=list.length?'':t('pair.no_results');
+    for(const item of list){
+      const el=document.createElement('div'); el.className='result'+(item.alreadyPaired?' paired':'');
+      const bits=[]; if(item.city)bits.push(esc(item.city)); const d=distance(item.distanceMeters); if(d)bits.push(esc(d)); if(!bits.length)bits.push(esc(t('pair.unknown_city')));
+      el.innerHTML=`<div><div class="name">${esc(item.name)}</div><div class="meta">${bits.join(' · ')}</div></div><button ${item.alreadyPaired?'disabled':''}>${esc(item.alreadyPaired?t('pair.already_paired'):t('pair.add'))}</button>`;
+      const b=el.querySelector('button'); if(!item.alreadyPaired)b.onclick=()=>add(item,b); results.appendChild(el);
+    }
+  }
   async function doSearch(){
     const value=q.value.trim(); results.innerHTML=''; if(value.length<2){status.textContent=t('pair.min_chars');return;}
-    status.textContent=t('pair.searching'); search.disabled=true; q.disabled=true;
-    try {
-      const list=await Homey.emit('search_bridges',{query:value}); status.textContent=list.length?'':t('pair.no_results');
-      for(const item of list){
-        const el=document.createElement('div'); el.className='result'+(item.alreadyPaired?' paired':'');
-        const meta=item.city?esc(item.city):esc(t('pair.unknown_city'));
-        el.innerHTML=`<div><div class="name">${esc(item.name)}</div><div class="meta">${meta}</div></div><button ${item.alreadyPaired?'disabled':''}>${esc(item.alreadyPaired?t('pair.already_paired'):t('pair.add'))}</button>`;
-        const b=el.querySelector('button'); if(!item.alreadyPaired)b.onclick=()=>add(item,b); results.appendChild(el);
-      }
-    } catch(e){ status.textContent=(e&&e.message)||t('pair.search_failed'); }
-    finally{search.disabled=false;q.disabled=false;q.focus();}
+    status.textContent=t('pair.searching'); search.disabled=true; nearby.disabled=true; q.disabled=true;
+    try { render(await Homey.emit('search_bridges',{query:value})); }
+    catch(e){ status.textContent=(e&&e.message)||t('pair.search_failed'); }
+    finally{search.disabled=false;nearby.disabled=false;q.disabled=false;q.focus();}
+  }
+  async function doNearby(){
+    results.innerHTML=''; status.textContent=t('pair.nearby_searching'); search.disabled=true; nearby.disabled=true; q.disabled=true;
+    try { render(await Homey.emit('nearby_bridges')); }
+    catch(e){ status.textContent=(e&&e.message)||t('pair.nearby_failed'); }
+    finally{search.disabled=false;nearby.disabled=false;q.disabled=false;}
   }
   async function add(item,button){
     button.disabled=true; status.textContent=t('pair.adding');
     try { const r=await Homey.emit('pair_bridge',{candidateId:item.candidateId}); await Homey.createDevice(r.device); Homey.done(); }
     catch(e){ status.textContent=(e&&e.message)||t('pair.pair_failed'); button.disabled=false; }
   }
-  search.onclick=doSearch;
+  search.onclick=doSearch; nearby.onclick=doNearby;
   q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();doSearch();}});
   Homey.ready(); q.focus();
 })();

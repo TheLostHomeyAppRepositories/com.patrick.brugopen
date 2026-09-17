@@ -1,0 +1,13 @@
+{
+  "type": "enum",
+  "title": {"en": "Bridge-opening impact", "nl": "Gevolg brugopening"},
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "values": [
+    {"id": "queue", "title": {"en": "Queue from bridge opening", "nl": "File door brugopening"}},
+    {"id": "residual", "title": {"en": "Queue still clearing", "nl": "Nasleep brugopening"}}
+  ],
+  "icon": "/assets/icons/route.svg"
+}

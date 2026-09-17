@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Departure advice",
+    "nl": "Vertrekcheck"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/assets/icons/route.svg"
+}

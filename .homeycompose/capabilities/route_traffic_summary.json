@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Bridge-opening traffic summary",
+    "nl": "Samenvatting gevolg brugopening"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": null,
+  "insights": false,
+  "icon": "/assets/icons/route.svg"
+}

@@ -13,7 +13,11 @@
     "search_failed": "Search failed. Please try again.",
     "pair_failed": "The bridge could not be added.",
     "missing_selection": "The selected bridge is no longer available. Search again.",
-    "unknown_city": "City unknown"
+    "unknown_city": "City unknown",
+    "nearby": "Bridges nearby",
+    "nearby_searching": "Finding bridges near Homey…",
+    "nearby_failed": "Nearby bridges could not be loaded.",
+    "location_unavailable": "Homey location is not available."
   },
   "status": {
     "unknown": "Unknown",
@@ -26,6 +30,97 @@
   },
   "errors": {
     "no_device": "No bridge selected.",
-    "refresh_failed": "NDW could not be refreshed."
+    "refresh_failed": "NDW could not be refreshed.",
+    "route_scan_failed": "The route could not be checked.",
+    "route_compare_failed": "The routes could not be compared.",
+    "location_unavailable": "Homey location is not available.",
+    "route_not_found": "The route was not found.",
+    "route_update_failed": "The route could not be updated."
+  },
+  "planning": {
+    "waiting": "Waiting for data",
+    "none": "No announcement",
+    "support_unknown": "Support unknown",
+    "unavailable": "Planning unavailable",
+    "traffic_waiting": "Waiting for bridge-opening impact",
+    "traffic_unknown": "Bridge-opening traffic impact unknown",
+    "traffic_unavailable": "Bridge-opening traffic impact temporarily unavailable"
+  },
+  "route_pair": {
+    "title": "Create bridge route",
+    "intro": "Name the route and select the bridges you want to monitor on the way. Add individual bridges to Homey first.",
+    "placeholder": "For example Route to work",
+    "loading": "Loading bridges…",
+    "none": "No bridges have been added yet. Add at least one bridge first.",
+    "add": "Add route",
+    "adding": "Adding route…",
+    "load_failed": "The bridges could not be loaded.",
+    "failed": "The route could not be added.",
+    "name_required": "Enter a route name.",
+    "bridge_required": "Select at least one bridge.",
+    "bridge_missing": "A selected bridge is no longer available.",
+    "already_exists": "This route already exists."
+  },
+  "route": {
+    "waiting": "Waiting for bridge data",
+    "no_announcement": "No announcement",
+    "free": "All bridges on this route are closed.",
+    "blocked_one": "Blocked: {bridge} is open.",
+    "blocked_many": "Blocked: {count} bridges are open.",
+    "uncertain": "Status uncertain: no reliable current data for {bridge}.",
+    "announced": "Route is currently free; opening announced at {bridge} at {time}.",
+    "traffic_waiting": "Waiting for bridge-opening impact",
+    "traffic_clear": "No queue caused by a bridge opening on this route.",
+    "traffic_unknown": "Bridge-opening traffic impact for this route is incomplete.",
+    "traffic_queue": "Queue from bridge opening at",
+    "traffic_residual": "Residual queue from bridge opening at"
+  },
+  "route_status": {
+    "unknown": "Data uncertain",
+    "free": "Free",
+    "announced": "Opening announced",
+    "blocked": "Blocked"
+  },
+  "traffic_status": {
+    "unknown": "Unknown",
+    "clear": "No queue from bridge opening",
+    "queue": "Queue from bridge opening",
+    "residual": "Residual queue after bridge opening"
+  },
+  "settings": {
+    "title": "Bridge Open Control Center",
+    "subtitle": "Live bridges, routes, history and data sources in one overview.",
+    "refresh": "Refresh everything",
+    "reload": "Reload overview",
+    "overview": "Overview",
+    "bridges": "Bridges",
+    "routes": "Routes",
+    "nearby": "Bridges near Homey",
+    "nearby_button": "Find nearby bridges",
+    "diagnostics": "Diagnostics",
+    "loading": "Loading…",
+    "saved": "Saved.",
+    "none": "No data",
+    "edit_route": "Manage bridges",
+    "save_route": "Save route",
+    "history": "History & pattern",
+    "route_measurement": "Local route blockages since",
+    "bridge_measurement": "Local openings since",
+    "current": "Current",
+    "bridge_count": "Bridges",
+    "route_count": "Routes",
+    "open_now": "Open now",
+    "blocked_routes": "Blocked routes",
+    "bridge_status": "Bridge status",
+    "next_opening": "Next opening",
+    "open_duration": "Opening duration",
+    "traffic": "Bridge-opening impact",
+    "route_status": "Route status",
+    "blockages_today": "Blockages today",
+    "blocked_time_today": "Blocked time today",
+    "refreshing": "Refreshing sources…",
+    "refreshed": "Refresh completed.",
+    "queue_length": "Queue length from opening",
+    "aftermath": "Recovery time after closing"
   }
 }

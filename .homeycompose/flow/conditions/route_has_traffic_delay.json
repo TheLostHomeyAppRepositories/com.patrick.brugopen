@@ -1,0 +1,18 @@
+{
+  "id": "route_has_traffic_delay",
+  "title": {
+    "en": "Route has queue caused by bridge opening",
+    "nl": "Route heeft file door brugopening"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

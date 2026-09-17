@@ -1,11 +1,11 @@
 {
   "name": "com.patrick.brugopen",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "main": "app.js",
   "scripts": {
     "generate:manifest": "node scripts/generate-app-json.js",
     "validate:project": "node scripts/generate-app-json.js && node scripts/validate-project.js",
-    "test": "node scripts/generate-app-json.js && node scripts/validate-project.js && node tests/smoke.js"
+    "test": "node scripts/generate-app-json.js && node scripts/validate-project.js && node tests/smoke.js && node tests/five_star.js && node tests/all_phases.js"
   },
   "dependencies": {}
 }

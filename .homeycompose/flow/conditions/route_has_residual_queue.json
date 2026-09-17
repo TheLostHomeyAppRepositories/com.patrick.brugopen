@@ -1,0 +1,18 @@
+{
+  "id": "route_has_residual_queue",
+  "title": {
+    "en": "Route has residual queue after bridge opening",
+    "nl": "Route heeft nasleep na brugopening"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

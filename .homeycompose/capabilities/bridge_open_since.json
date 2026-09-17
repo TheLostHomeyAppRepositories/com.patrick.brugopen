@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Open since",
+    "nl": "Open sinds"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/assets/icons/clock.svg"
+}

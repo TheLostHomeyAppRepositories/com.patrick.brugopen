@@ -1,0 +1,53 @@
+{
+  "id": "bridge_planned_within",
+  "title": {
+    "en": "Announced opening starts within...",
+    "nl": "Aangekondigde opening begint binnen..."
+  },
+  "titleFormatted": {
+    "en": "Announced opening starts within [[minutes]] minutes",
+    "nl": "Aangekondigde opening begint binnen [[minutes]] minuten"
+  },
+  "hint": {
+    "en": "Uses an actual NDW announced opening; it does not predict bridge openings.",
+    "nl": "Gebruikt een werkelijk door NDW aangekondigde opening; dit is geen voorspelling."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": { "en": "Bridge", "nl": "Brug" }
+    },
+    {
+      "name": "planned_start",
+      "type": "string",
+      "title": { "en": "Planned start", "nl": "Geplande start" }
+    },
+    {
+      "name": "planned_end",
+      "type": "string",
+      "title": { "en": "Planned end", "nl": "Gepland einde" }
+    },
+    {
+      "name": "minutes_until",
+      "type": "number",
+      "title": { "en": "Minutes until opening", "nl": "Minuten tot opening" }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": { "en": "Device", "nl": "Apparaat" },
+      "filter": "driver_id=bridge"
+    },
+    {
+      "name": "minutes",
+      "type": "number",
+      "title": { "en": "Minutes", "nl": "Minuten" },
+      "min": 1,
+      "max": 180,
+      "step": 1
+    }
+  ]
+}

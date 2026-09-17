@@ -1,0 +1,127 @@
+{
+  "id": "bridge_queue_longer_than",
+  "title": {
+    "en": "Queue from bridge opening exceeds...",
+    "nl": "File door brugopening langer dan..."
+  },
+  "titleFormatted": {
+    "en": "Queue from bridge opening exceeds [[kilometers]] km",
+    "nl": "File door brugopening is langer dan [[kilometers]] km"
+  },
+  "hint": {
+    "en": "Triggers once when the bridge-opening queue crosses the selected length.",
+    "nl": "Start één keer wanneer de file door de brugopening de gekozen lengte passeert."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": {
+        "en": "Bridge",
+        "nl": "Brug"
+      }
+    },
+    {
+      "name": "impact_status",
+      "type": "string",
+      "title": {
+        "en": "Impact status",
+        "nl": "Impactstatus"
+      }
+    },
+    {
+      "name": "impact_status_id",
+      "type": "string",
+      "title": {
+        "en": "Impact status ID",
+        "nl": "Impactstatus-ID"
+      }
+    },
+    {
+      "name": "queue_length_km",
+      "type": "number",
+      "title": {
+        "en": "Queue length (km)",
+        "nl": "Filelengte (km)"
+      }
+    },
+    {
+      "name": "queue_length_meters",
+      "type": "number",
+      "title": {
+        "en": "Queue length (m)",
+        "nl": "Filelengte (m)"
+      }
+    },
+    {
+      "name": "aftermath_duration",
+      "type": "string",
+      "title": {
+        "en": "Recovery duration",
+        "nl": "Afwikkeltijd"
+      }
+    },
+    {
+      "name": "aftermath_seconds",
+      "type": "number",
+      "title": {
+        "en": "Recovery duration in seconds",
+        "nl": "Afwikkeltijd in seconden"
+      }
+    },
+    {
+      "name": "road",
+      "type": "string",
+      "title": {
+        "en": "Road",
+        "nl": "Weg"
+      }
+    },
+    {
+      "name": "summary",
+      "type": "string",
+      "title": {
+        "en": "Summary",
+        "nl": "Samenvatting"
+      }
+    },
+    {
+      "name": "previous_impact_status",
+      "type": "string",
+      "title": {
+        "en": "Previous impact status",
+        "nl": "Vorige impactstatus"
+      }
+    },
+    {
+      "name": "previous_impact_status_id",
+      "type": "string",
+      "title": {
+        "en": "Previous impact status ID",
+        "nl": "Vorige impactstatus-ID"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    },
+    {
+      "name": "kilometers",
+      "type": "number",
+      "title": {
+        "en": "Kilometers",
+        "nl": "Kilometer"
+      },
+      "min": 0.1,
+      "max": 20,
+      "step": 0.1
+    }
+  ]
+}

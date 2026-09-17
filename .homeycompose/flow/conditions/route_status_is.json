@@ -1,0 +1,60 @@
+{
+  "id": "route_status_is",
+  "title": {
+    "en": "Route status is...",
+    "nl": "Routestatus is..."
+  },
+  "titleFormatted": {
+    "en": "Route status is [[status]]",
+    "nl": "Routestatus is [[status]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    },
+    {
+      "name": "status",
+      "type": "dropdown",
+      "title": {
+        "en": "Status",
+        "nl": "Status"
+      },
+      "values": [
+        {
+          "id": "free",
+          "title": {
+            "en": "Free",
+            "nl": "Vrij"
+          }
+        },
+        {
+          "id": "announced",
+          "title": {
+            "en": "Opening announced",
+            "nl": "Opening aangekondigd"
+          }
+        },
+        {
+          "id": "blocked",
+          "title": {
+            "en": "Blocked",
+            "nl": "Geblokkeerd"
+          }
+        },
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Data uncertain",
+            "nl": "Data onzeker"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Bridges on route",
+    "nl": "Bruggen op route"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "decimals": 0,
+  "min": 1,
+  "icon": "/assets/icons/bridge.svg"
+}

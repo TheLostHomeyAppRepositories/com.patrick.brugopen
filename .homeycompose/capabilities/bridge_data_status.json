@@ -17,6 +17,13 @@
       }
     },
     {
+      "id": "stale",
+      "title": {
+        "en": "Data is stale",
+        "nl": "Data is verouderd"
+      }
+    },
+    {
       "id": "error",
       "title": {
         "en": "Temporarily unavailable",

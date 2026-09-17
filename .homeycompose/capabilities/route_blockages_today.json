@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Blockages today",
+    "nl": "Blokkades vandaag"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true,
+  "decimals": 0,
+  "min": 0,
+  "icon": "/assets/icons/route.svg"
+}

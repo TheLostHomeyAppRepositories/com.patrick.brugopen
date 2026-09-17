@@ -1,0 +1,18 @@
+{
+  "id": "bridge_has_residual_queue",
+  "title": {
+    "en": "Bridge is closed but its queue remains",
+    "nl": "Brug is dicht maar file door opening staat er nog"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=bridge"
+    }
+  ]
+}

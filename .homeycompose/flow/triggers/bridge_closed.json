@@ -40,6 +40,22 @@
         "en": "Ended at",
         "nl": "Gesloten om"
       }
+    },
+    {
+      "name": "last_open_duration",
+      "type": "string",
+      "title": {
+        "en": "Opening duration",
+        "nl": "Openingsduur"
+      }
+    },
+    {
+      "name": "last_open_duration_seconds",
+      "type": "number",
+      "title": {
+        "en": "Opening duration in seconds",
+        "nl": "Openingsduur in seconden"
+      }
     }
   ],
   "args": [

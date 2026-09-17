@@ -1,3 +1,1 @@
-Add bridges in the Netherlands to Homey and see whether road traffic can pass. Search uses public Rijkswaterstaat data and, when needed, PDOK/Kadaster location data to recognize common bridge names. Use current and announced bridge openings in Flow for notifications and automations.
-
-Status information is based on public NDW and Rijkswaterstaat data. Timing, coverage and completeness depend on the information supplied by these sources. PDOK Location API data is provided by Kadaster/PDOK under CC BY 4.0.
+Brug Open for Homey. The core state uses public NDW and Rijkswaterstaat data. Traffic impact is limited to queues that can be causally linked to a bridge opening; unrelated incidents, roadworks and nearby traffic are ignored. Local history and route choices remain on Homey.

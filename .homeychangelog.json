@@ -14,5 +14,13 @@
   "1.0.3": {
     "en": "App Store image updated.",
     "nl": "App Store-afbeelding vernieuwd."
+  },
+  "1.1.0": {
+    "en": "Added Bridge Routes, opening duration and local statistics, smarter opening announcements, and Flow support for bridge-opening queues and residual traffic.",
+    "nl": "Nieuw: Brugroutes, openingsduur en lokale statistieken, slimmere aankondigingen en Flow-ondersteuning voor file/nasleep door brugopeningen."
+  },
+  "1.1.1": {
+    "en": "App Store images updated according to Athom guidelines.",
+    "nl": "App Store-afbeeldingen aangepast volgens de richtlijnen van Athom."
   }
 }

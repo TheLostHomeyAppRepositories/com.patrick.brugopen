@@ -1,0 +1,53 @@
+{
+  "id": "bridge_data_stale",
+  "title": {
+    "en": "No fresh bridge data for...",
+    "nl": "Geen actuele brugdata gedurende..."
+  },
+  "titleFormatted": {
+    "en": "No fresh bridge data for [[minutes]] minutes",
+    "nl": "Geen actuele brugdata gedurende [[minutes]] minuten"
+  },
+  "hint": {
+    "en": "Triggers once when no successful current NDW check has been received for the selected duration.",
+    "nl": "Start één keer wanneer gedurende de gekozen tijd geen succesvolle actuele NDW-controle is ontvangen."
+  },
+  "tokens": [
+    {
+      "name": "bridge_name",
+      "type": "string",
+      "title": { "en": "Bridge", "nl": "Brug" }
+    },
+    {
+      "name": "data_age",
+      "type": "string",
+      "title": { "en": "Data age", "nl": "Leeftijd data" }
+    },
+    {
+      "name": "data_age_seconds",
+      "type": "number",
+      "title": { "en": "Data age in seconds", "nl": "Leeftijd data in seconden" }
+    },
+    {
+      "name": "last_successful_check",
+      "type": "string",
+      "title": { "en": "Last successful check", "nl": "Laatste succesvolle controle" }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": { "en": "Device", "nl": "Apparaat" },
+      "filter": "driver_id=bridge"
+    },
+    {
+      "name": "minutes",
+      "type": "number",
+      "title": { "en": "Minutes", "nl": "Minuten" },
+      "min": 1,
+      "max": 1440,
+      "step": 1
+    }
+  ]
+}

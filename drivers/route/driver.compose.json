@@ -1,0 +1,37 @@
+{
+  "name": {
+    "en": "Bridge route",
+    "nl": "Brugroute"
+  },
+  "class": "sensor",
+  "capabilities": [
+    "route_status",
+    "route_problem_bridge",
+    "route_next_opening",
+    "route_summary",
+    "route_bridge_count",
+    "route_open_count",
+    "route_announced_count",
+    "route_blockages_today",
+    "route_blocked_time_today",
+    "route_average_blockage_duration",
+    "route_longest_blockage_duration",
+    "route_traffic_status",
+    "route_traffic_summary",
+    "route_queue_length",
+    "route_aftermath_duration"
+  ],
+  "images": {
+    "small": "/drivers/route/assets/images/small.png",
+    "large": "/drivers/route/assets/images/large.png",
+    "xlarge": "/drivers/route/assets/images/xlarge.png"
+  },
+  "platforms": [
+    "local"
+  ],
+  "pair": [
+    {
+      "id": "create_route"
+    }
+  ]
+}

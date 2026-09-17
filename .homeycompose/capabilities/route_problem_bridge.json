@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Relevant bridge",
+    "nl": "Relevante brug"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/assets/icons/bridge.svg"
+}

@@ -1,0 +1,144 @@
+{
+  "id": "route_blocked",
+  "title": {
+    "en": "Route becomes blocked",
+    "nl": "Route wordt geblokkeerd"
+  },
+  "hint": {
+    "en": "Starts when one or more bridges on the route are open.",
+    "nl": "Start wanneer één of meer bruggen op de route openstaan."
+  },
+  "tokens": [
+    {
+      "name": "route_name",
+      "type": "string",
+      "title": {
+        "en": "Route",
+        "nl": "Route"
+      }
+    },
+    {
+      "name": "route_status",
+      "type": "string",
+      "title": {
+        "en": "Route status",
+        "nl": "Routestatus"
+      }
+    },
+    {
+      "name": "route_status_id",
+      "type": "string",
+      "title": {
+        "en": "Route status ID",
+        "nl": "Routestatus-ID"
+      }
+    },
+    {
+      "name": "relevant_bridge",
+      "type": "string",
+      "title": {
+        "en": "Relevant bridge",
+        "nl": "Relevante brug"
+      }
+    },
+    {
+      "name": "next_opening",
+      "type": "string",
+      "title": {
+        "en": "Next announced opening",
+        "nl": "Volgende aankondiging"
+      }
+    },
+    {
+      "name": "summary",
+      "type": "string",
+      "title": {
+        "en": "Departure check",
+        "nl": "Vertrekcheck"
+      }
+    },
+    {
+      "name": "bridge_count",
+      "type": "number",
+      "title": {
+        "en": "Bridges on route",
+        "nl": "Bruggen op route"
+      }
+    },
+    {
+      "name": "open_bridge_count",
+      "type": "number",
+      "title": {
+        "en": "Open bridges",
+        "nl": "Open bruggen"
+      }
+    },
+    {
+      "name": "announced_opening_count",
+      "type": "number",
+      "title": {
+        "en": "Announced openings",
+        "nl": "Aangekondigde openingen"
+      }
+    },
+    {
+      "name": "traffic_status",
+      "type": "string",
+      "title": {
+        "en": "Bridge-opening impact",
+        "nl": "Gevolg brugopening"
+      }
+    },
+    {
+      "name": "traffic_status_id",
+      "type": "string",
+      "title": {
+        "en": "Bridge-opening impact ID",
+        "nl": "Gevolg brugopening-ID"
+      }
+    },
+    {
+      "name": "traffic_summary",
+      "type": "string",
+      "title": {
+        "en": "Bridge-opening impact information",
+        "nl": "Informatie gevolg brugopening"
+      }
+    },
+    {
+      "name": "road_clear",
+      "type": "string",
+      "title": {
+        "en": "Route clear including bridge-opening aftermath",
+        "nl": "Route vrij inclusief nasleep brugopening"
+      }
+    },
+    {
+      "name": "blockages_today",
+      "type": "number",
+      "title": {
+        "en": "Blockages today",
+        "nl": "Blokkades vandaag"
+      }
+    },
+    {
+      "name": "blocked_time_today",
+      "type": "string",
+      "title": {
+        "en": "Blocked time today",
+        "nl": "Blokkadetijd vandaag"
+      }
+    }
+  ],
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

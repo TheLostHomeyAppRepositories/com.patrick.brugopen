@@ -12,7 +12,7 @@
   "author": {
     "name": "Patrick"
   },
-  "version": "1.0.3",
+  "version": "1.1.1",
   "compatibility": ">=7.4.0",
   "sdk": 3,
   "category": "tools",
@@ -47,6 +47,27 @@
     "url": "https://github.com/glijie/brug-open-homey/issues"
   },
   "source": "https://github.com/glijie/brug-open-homey",
+  "permissions": [
+    "homey:manager:geolocation"
+  ],
+  "api": {
+    "getDashboard": {
+      "method": "GET",
+      "path": "/dashboard"
+    },
+    "updateRoute": {
+      "method": "PUT",
+      "path": "/routes/:id"
+    },
+    "refreshEverything": {
+      "method": "POST",
+      "path": "/refresh"
+    },
+    "getNearby": {
+      "method": "GET",
+      "path": "/nearby"
+    }
+  },
   "drivers": [
     {
       "name": {
@@ -59,7 +80,18 @@
         "bridge_open_state",
         "bridge_next_opening",
         "bridge_last_check",
-        "bridge_data_status"
+        "bridge_data_status",
+        "bridge_open_since",
+        "bridge_open_duration",
+        "bridge_last_open_duration",
+        "bridge_openings_today",
+        "bridge_open_time_today",
+        "bridge_average_open_duration",
+        "bridge_longest_open_duration",
+        "bridge_traffic_status",
+        "bridge_traffic_summary",
+        "bridge_queue_length",
+        "bridge_aftermath_duration"
       ],
       "images": {
         "small": "/drivers/bridge/assets/images/small.png",
@@ -76,12 +108,60 @@
       ],
       "id": "bridge",
       "icon": "/drivers/bridge/assets/icon.svg"
+    },
+    {
+      "name": {
+        "en": "Bridge route",
+        "nl": "Brugroute"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "route_status",
+        "route_problem_bridge",
+        "route_next_opening",
+        "route_summary",
+        "route_bridge_count",
+        "route_open_count",
+        "route_announced_count",
+        "route_blockages_today",
+        "route_blocked_time_today",
+        "route_average_blockage_duration",
+        "route_longest_blockage_duration",
+        "route_traffic_status",
+        "route_traffic_summary",
+        "route_queue_length",
+        "route_aftermath_duration"
+      ],
+      "images": {
+        "small": "/drivers/route/assets/images/small.png",
+        "large": "/drivers/route/assets/images/large.png",
+        "xlarge": "/drivers/route/assets/images/xlarge.png"
+      },
+      "platforms": [
+        "local"
+      ],
+      "pair": [
+        {
+          "id": "create_route"
+        }
+      ],
+      "id": "route",
+      "icon": "/drivers/route/assets/icon.svg"
     }
   ],
   "flow": {
     "triggers": [
       {
+        "id": "bridge_aftermath_longer_than"
+      },
+      {
         "id": "bridge_closed"
+      },
+      {
+        "id": "bridge_data_stale"
+      },
+      {
+        "id": "bridge_open_longer_than"
       },
       {
         "id": "bridge_opened"
@@ -90,10 +170,73 @@
         "id": "bridge_planned"
       },
       {
+        "id": "bridge_planned_cancelled"
+      },
+      {
+        "id": "bridge_planned_changed"
+      },
+      {
+        "id": "bridge_planned_within"
+      },
+      {
+        "id": "bridge_queue_longer_than"
+      },
+      {
+        "id": "bridge_queue_recovered"
+      },
+      {
+        "id": "bridge_queue_residual"
+      },
+      {
+        "id": "bridge_queue_started"
+      },
+      {
         "id": "bridge_status_changed"
+      },
+      {
+        "id": "route_aftermath_longer_than"
+      },
+      {
+        "id": "route_blocked"
+      },
+      {
+        "id": "route_cleared"
+      },
+      {
+        "id": "route_planned"
+      },
+      {
+        "id": "route_planned_cancelled"
+      },
+      {
+        "id": "route_planned_changed"
+      },
+      {
+        "id": "route_queue_longer_than"
+      },
+      {
+        "id": "route_queue_residual"
+      },
+      {
+        "id": "route_status_changed"
+      },
+      {
+        "id": "route_traffic_changed"
+      },
+      {
+        "id": "route_traffic_delay"
+      },
+      {
+        "id": "route_traffic_recovered"
       }
     ],
     "conditions": [
+      {
+        "id": "bridge_has_opening_queue"
+      },
+      {
+        "id": "bridge_has_residual_queue"
+      },
       {
         "id": "bridge_is_closed"
       },
@@ -104,16 +247,88 @@
         "id": "bridge_is_planned"
       },
       {
+        "id": "bridge_queue_length_above"
+      },
+      {
         "id": "bridge_status_is"
+      },
+      {
+        "id": "route_has_planned"
+      },
+      {
+        "id": "route_has_residual_queue"
+      },
+      {
+        "id": "route_has_traffic_delay"
+      },
+      {
+        "id": "route_is_blocked"
+      },
+      {
+        "id": "route_is_free"
+      },
+      {
+        "id": "route_is_road_clear"
+      },
+      {
+        "id": "route_queue_length_above"
+      },
+      {
+        "id": "route_status_is"
       }
     ],
     "actions": [
       {
+        "id": "check_bridge_impact"
+      },
+      {
+        "id": "compare_routes"
+      },
+      {
         "id": "refresh_bridge_status"
+      },
+      {
+        "id": "scan_route"
       }
     ]
   },
   "capabilities": {
+    "bridge_aftermath_display": {
+      "type": "string",
+      "title": {
+        "en": "Traffic recovery",
+        "nl": "Afwikkeltijd"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_aftermath_duration": {
+      "type": "string",
+      "title": {
+        "en": "Traffic recovery after closing",
+        "nl": "Afwikkeltijd na sluiten"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_average_open_duration": {
+      "type": "string",
+      "title": {
+        "en": "Average opening duration",
+        "nl": "Gemiddelde openingsduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
     "bridge_data_status": {
       "type": "enum",
       "title": {
@@ -130,6 +345,13 @@
           "title": {
             "en": "Up to date",
             "nl": "Actueel"
+          }
+        },
+        {
+          "id": "stale",
+          "title": {
+            "en": "Data is stale",
+            "nl": "Data is verouderd"
           }
         },
         {
@@ -168,11 +390,59 @@
       "insights": false,
       "icon": "/assets/icons/refresh.svg"
     },
+    "bridge_last_open_duration": {
+      "type": "string",
+      "title": {
+        "en": "Last opening duration",
+        "nl": "Laatste openingsduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_longest_open_duration": {
+      "type": "string",
+      "title": {
+        "en": "Longest opening duration",
+        "nl": "Langste openingsduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
     "bridge_next_opening": {
       "type": "string",
       "title": {
         "en": "Next opening",
         "nl": "Volgende opening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_open_duration": {
+      "type": "string",
+      "title": {
+        "en": "Current opening duration",
+        "nl": "Huidige openingsduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_open_since": {
+      "type": "string",
+      "title": {
+        "en": "Open since",
+        "nl": "Open sinds"
       },
       "getable": true,
       "setable": false,
@@ -215,6 +485,70 @@
       ],
       "icon": "/assets/icons/bridge-open.svg"
     },
+    "bridge_open_time_today": {
+      "type": "string",
+      "title": {
+        "en": "Open time today",
+        "nl": "Open tijd vandaag"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "bridge_openings_today": {
+      "type": "number",
+      "title": {
+        "en": "Openings today",
+        "nl": "Openingen vandaag"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "decimals": 0,
+      "min": 0,
+      "icon": "/assets/icons/bridge.svg"
+    },
+    "bridge_queue_length": {
+      "type": "number",
+      "title": {
+        "en": "Queue from bridge opening",
+        "nl": "File door brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": true,
+      "units": {
+        "en": "km",
+        "nl": "km"
+      },
+      "decimals": 1,
+      "min": 0,
+      "step": 0.1,
+      "icon": "/assets/icons/route.svg"
+    },
+    "bridge_queue_length_display": {
+      "type": "number",
+      "title": {
+        "en": "Queue length",
+        "nl": "Filelengte"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "units": {
+        "en": "km",
+        "nl": "km"
+      },
+      "decimals": 1,
+      "min": 0,
+      "step": 0.1,
+      "icon": "/assets/icons/route.svg"
+    },
     "bridge_status": {
       "type": "enum",
       "title": {
@@ -256,6 +590,402 @@
         }
       ],
       "icon": "/assets/icons/bridge.svg"
+    },
+    "bridge_traffic_display": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge-opening impact",
+        "nl": "Gevolg brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "values": [
+        {
+          "id": "queue",
+          "title": {
+            "en": "Queue from bridge opening",
+            "nl": "File door brugopening"
+          }
+        },
+        {
+          "id": "residual",
+          "title": {
+            "en": "Queue still clearing",
+            "nl": "Nasleep brugopening"
+          }
+        }
+      ],
+      "icon": "/assets/icons/route.svg"
+    },
+    "bridge_traffic_status": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge-opening impact",
+        "nl": "Gevolg brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": true,
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "clear",
+          "title": {
+            "en": "No queue from bridge opening",
+            "nl": "Geen file door brugopening"
+          }
+        },
+        {
+          "id": "queue",
+          "title": {
+            "en": "Queue from bridge opening",
+            "nl": "File door brugopening"
+          }
+        },
+        {
+          "id": "residual",
+          "title": {
+            "en": "Queue still clearing after bridge opening",
+            "nl": "Nasleep na brugopening"
+          }
+        }
+      ],
+      "icon": "/assets/icons/route.svg"
+    },
+    "bridge_traffic_summary": {
+      "type": "string",
+      "title": {
+        "en": "Bridge-opening impact detail",
+        "nl": "Detail gevolg brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": false,
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_aftermath_display": {
+      "type": "string",
+      "title": {
+        "en": "Traffic recovery",
+        "nl": "Afwikkeltijd"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_aftermath_duration": {
+      "type": "string",
+      "title": {
+        "en": "Longest traffic recovery",
+        "nl": "Langste afwikkeltijd"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_announced_count": {
+      "type": "number",
+      "title": {
+        "en": "Announced openings",
+        "nl": "Aangekondigde openingen"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "decimals": 0,
+      "min": 0,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_average_blockage_duration": {
+      "type": "string",
+      "title": {
+        "en": "Average blockage duration",
+        "nl": "Gemiddelde blokkadeduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_blockages_today": {
+      "type": "number",
+      "title": {
+        "en": "Blockages today",
+        "nl": "Blokkades vandaag"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "decimals": 0,
+      "min": 0,
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_blocked_time_today": {
+      "type": "string",
+      "title": {
+        "en": "Blocked time today",
+        "nl": "Blokkadetijd vandaag"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_bridge_count": {
+      "type": "number",
+      "title": {
+        "en": "Bridges on route",
+        "nl": "Bruggen op route"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "decimals": 0,
+      "min": 1,
+      "icon": "/assets/icons/bridge.svg"
+    },
+    "route_longest_blockage_duration": {
+      "type": "string",
+      "title": {
+        "en": "Longest blockage duration",
+        "nl": "Langste blokkadeduur"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_next_opening": {
+      "type": "string",
+      "title": {
+        "en": "Next announced opening",
+        "nl": "Volgende aankondiging"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/clock.svg"
+    },
+    "route_open_count": {
+      "type": "number",
+      "title": {
+        "en": "Open bridges",
+        "nl": "Open bruggen"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "decimals": 0,
+      "min": 0,
+      "icon": "/assets/icons/bridge-open.svg"
+    },
+    "route_problem_bridge": {
+      "type": "string",
+      "title": {
+        "en": "Relevant bridge",
+        "nl": "Relevante brug"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/bridge.svg"
+    },
+    "route_queue_length": {
+      "type": "number",
+      "title": {
+        "en": "Longest bridge-opening queue",
+        "nl": "Langste file door brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": true,
+      "units": {
+        "en": "km",
+        "nl": "km"
+      },
+      "decimals": 1,
+      "min": 0,
+      "step": 0.1,
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_queue_length_display": {
+      "type": "number",
+      "title": {
+        "en": "Queue length",
+        "nl": "Filelengte"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "units": {
+        "en": "km",
+        "nl": "km"
+      },
+      "decimals": 1,
+      "min": 0,
+      "step": 0.1,
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_status": {
+      "type": "enum",
+      "title": {
+        "en": "Route status",
+        "nl": "Routestatus"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Data uncertain",
+            "nl": "Data onzeker"
+          }
+        },
+        {
+          "id": "free",
+          "title": {
+            "en": "Free",
+            "nl": "Vrij"
+          }
+        },
+        {
+          "id": "announced",
+          "title": {
+            "en": "Opening announced",
+            "nl": "Opening aangekondigd"
+          }
+        },
+        {
+          "id": "blocked",
+          "title": {
+            "en": "Blocked",
+            "nl": "Geblokkeerd"
+          }
+        }
+      ],
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_summary": {
+      "type": "string",
+      "title": {
+        "en": "Departure advice",
+        "nl": "Vertrekcheck"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_traffic_display": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge-opening impact on route",
+        "nl": "Gevolg brugopening route"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": false,
+      "values": [
+        {
+          "id": "queue",
+          "title": {
+            "en": "Queue from bridge opening",
+            "nl": "File door brugopening"
+          }
+        },
+        {
+          "id": "residual",
+          "title": {
+            "en": "Queue still clearing",
+            "nl": "Nasleep brugopening"
+          }
+        }
+      ],
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_traffic_status": {
+      "type": "enum",
+      "title": {
+        "en": "Bridge-opening traffic impact",
+        "nl": "Verkeersgevolg brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": true,
+      "values": [
+        {
+          "id": "unknown",
+          "title": {
+            "en": "Unknown",
+            "nl": "Onbekend"
+          }
+        },
+        {
+          "id": "clear",
+          "title": {
+            "en": "No bridge-opening queue",
+            "nl": "Geen file door brugopening"
+          }
+        },
+        {
+          "id": "queue",
+          "title": {
+            "en": "Queue from bridge opening",
+            "nl": "File door brugopening"
+          }
+        },
+        {
+          "id": "residual",
+          "title": {
+            "en": "Residual queue after bridge opening",
+            "nl": "Nasleep na brugopening"
+          }
+        }
+      ],
+      "icon": "/assets/icons/route.svg"
+    },
+    "route_traffic_summary": {
+      "type": "string",
+      "title": {
+        "en": "Bridge-opening traffic summary",
+        "nl": "Samenvatting gevolg brugopening"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": null,
+      "insights": false,
+      "icon": "/assets/icons/route.svg"
     }
   }
 }

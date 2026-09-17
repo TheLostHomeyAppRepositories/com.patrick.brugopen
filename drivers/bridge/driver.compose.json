@@ -9,7 +9,18 @@
     "bridge_open_state",
     "bridge_next_opening",
     "bridge_last_check",
-    "bridge_data_status"
+    "bridge_data_status",
+    "bridge_open_since",
+    "bridge_open_duration",
+    "bridge_last_open_duration",
+    "bridge_openings_today",
+    "bridge_open_time_today",
+    "bridge_average_open_duration",
+    "bridge_longest_open_duration",
+    "bridge_traffic_status",
+    "bridge_traffic_summary",
+    "bridge_queue_length",
+    "bridge_aftermath_duration"
   ],
   "images": {
     "small": "/drivers/bridge/assets/images/small.png",

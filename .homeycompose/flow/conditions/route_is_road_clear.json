@@ -1,0 +1,18 @@
+{
+  "id": "route_is_road_clear",
+  "title": {
+    "en": "Route bridges and bridge-opening traffic are clear",
+    "nl": "Route is vrij inclusief nasleep brugopening"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    }
+  ]
+}

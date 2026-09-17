@@ -1,0 +1,33 @@
+{
+  "id": "route_queue_length_above",
+  "title": {
+    "en": "Bridge-opening queue on route is longer than...",
+    "nl": "File door brugopening op route is langer dan..."
+  },
+  "titleFormatted": {
+    "en": "Bridge-opening queue on route is longer than [[kilometers]] km",
+    "nl": "File door brugopening op route is langer dan [[kilometers]] km"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "title": {
+        "en": "Device",
+        "nl": "Apparaat"
+      },
+      "filter": "driver_id=route"
+    },
+    {
+      "name": "kilometers",
+      "type": "number",
+      "title": {
+        "en": "Kilometers",
+        "nl": "Kilometer"
+      },
+      "min": 0.1,
+      "max": 20,
+      "step": 0.1
+    }
+  ]
+}

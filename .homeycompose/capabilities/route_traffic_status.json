@@ -1,0 +1,42 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Bridge-opening traffic impact",
+    "nl": "Verkeersgevolg brugopening"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": null,
+  "insights": true,
+  "values": [
+    {
+      "id": "unknown",
+      "title": {
+        "en": "Unknown",
+        "nl": "Onbekend"
+      }
+    },
+    {
+      "id": "clear",
+      "title": {
+        "en": "No bridge-opening queue",
+        "nl": "Geen file door brugopening"
+      }
+    },
+    {
+      "id": "queue",
+      "title": {
+        "en": "Queue from bridge opening",
+        "nl": "File door brugopening"
+      }
+    },
+    {
+      "id": "residual",
+      "title": {
+        "en": "Residual queue after bridge opening",
+        "nl": "Nasleep na brugopening"
+      }
+    }
+  ],
+  "icon": "/assets/icons/route.svg"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Longest blockage duration",
+    "nl": "Langste blokkadeduur"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": false,
+  "icon": "/assets/icons/clock.svg"
+}
