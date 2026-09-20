@@ -23,12 +23,18 @@ class RouteDevice extends Homey.Device {
       String(this.getCapabilityValue('route_aftermath_duration') || '—'),
     );
     if (this.homey.app && typeof this.homey.app.registerRouteDevice === 'function') this.homey.app.registerRouteDevice(this);
-    this._timer = setInterval(() => this.refreshRoute().catch(err => this.log(`Route refresh failed: ${err && err.message ? err.message : err}`)), ROUTE_TICK_MS);
+    const routeTick = () => this.refreshRoute().catch(err => this.log(`Route refresh failed: ${err && err.message ? err.message : err}`));
+    this._timer = this.homey && typeof this.homey.setInterval === 'function'
+      ? this.homey.setInterval(routeTick, ROUTE_TICK_MS)
+      : setInterval(routeTick, ROUTE_TICK_MS);
     await this.refreshRoute();
   }
 
   async onDeleted() {
-    if (this._timer) clearInterval(this._timer);
+    if (this._timer) {
+      if (this.homey && typeof this.homey.clearInterval === 'function') this.homey.clearInterval(this._timer);
+      else clearInterval(this._timer);
+    }
     this._timer = null;
     if (this.homey.app && typeof this.homey.app.unregisterRouteDevice === 'function') this.homey.app.unregisterRouteDevice(this);
   }

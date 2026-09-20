@@ -22,5 +22,13 @@
   "1.1.1": {
     "en": "App Store images updated according to Athom guidelines.",
     "nl": "App Store-afbeeldingen aangepast volgens de richtlijnen van Athom."
+  },
+  "1.1.2": {
+    "en": "Improved reliability of automatic bridge status updates.",
+    "nl": "Betrouwbaarheid van automatische brugstatus-updates verbeterd."
+  },
+  "1.1.3": {
+    "en": "Optimized traffic monitoring so queue and residual traffic data is only retrieved when relevant.",
+    "nl": "Verkeersmonitoring geoptimaliseerd: file- en nasleepdata wordt alleen opgehaald wanneer relevant."
   }
 }

@@ -44,6 +44,29 @@ function testTrafficParser() {
   assert.strictEqual(trackedQueueImpact(cross,{recordIds:['Q-CROSS']}).queueLength,800);
 }
 
+
+function testDynamicTrafficMonitoring() {
+  const service = new TrafficFeedService({});
+  let bridgeStatus = 'closed';
+  let trafficStatus = 'clear';
+  let lastClosedAt = '2020-01-01T00:00:00Z';
+  const device = {
+    getData:()=>({id:'NLDYNAMIC'}),
+    getName:()=> 'Dynamic bridge',
+    getBridgeMeta:()=>({status:bridgeStatus,lastClosedAt}),
+    getCapabilityValue:(id)=> id === 'bridge_traffic_status' ? trafficStatus : null,
+  };
+  service.devices.add(device);
+  assert.strictEqual(service._needsMonitoring(), false, 'Closed bridge without aftermath must not keep traffic feed active');
+  bridgeStatus = 'open';
+  assert.strictEqual(service._needsMonitoring(), true, 'Open bridge must activate traffic monitoring');
+  bridgeStatus = 'closed'; trafficStatus = 'residual';
+  assert.strictEqual(service._needsMonitoring(), true, 'Residual bridge queue must keep traffic monitoring active');
+  trafficStatus = 'clear'; lastClosedAt = new Date().toISOString();
+  assert.strictEqual(service._needsMonitoring(), true, 'Recently closed bridge gets a short grace window for delayed queue publication');
+  lastClosedAt = '2020-01-01T00:00:00Z';
+  assert.strictEqual(service._needsMonitoring(), false, 'Traffic monitoring must stop again after the grace window');
+}
 function testTrafficServiceCorrelation() {
   const service = new TrafficFeedService({});
   let bridgeStatus='open';
@@ -177,7 +200,7 @@ async function testRouteHistoryTrafficAndEdit() {
 function testManifestAndControlCenter() {
   const compose=JSON.parse(fs.readFileSync(path.join(root,'.homeycompose/app.json'),'utf8'));
   const manifest=JSON.parse(fs.readFileSync(path.join(root,'app.json'),'utf8'));
-  assert.strictEqual(compose.version,'1.1.2');
+  assert.strictEqual(compose.version,'1.1.3');
   assert(compose.permissions.includes('homey:manager:geolocation'));
   for(const key of ['getDashboard','updateRoute','refreshEverything','getNearby']) assert(compose.api[key]);
   assert(fs.existsSync(path.join(root,'settings/index.html')));
@@ -198,6 +221,6 @@ function testManifestAndControlCenter() {
 }
 
 (async()=>{
-  testTrafficParser(); testTrafficServiceCorrelation(); await testNearbyFis(); await testBridgeExternalStates(); await testRouteHistoryTrafficAndEdit(); testManifestAndControlCenter();
+  testTrafficParser(); testDynamicTrafficMonitoring(); testTrafficServiceCorrelation(); await testNearbyFis(); await testBridgeExternalStates(); await testRouteHistoryTrafficAndEdit(); testManifestAndControlCenter();
   console.log('All-phases tests OK: bridge-opening-caused NDW queues only, nearby FIS search, route traffic recovery/history/editing, Control Center and API manifest; navigation-notice enrichment removed.');
 })().catch(err=>{console.error(err);process.exit(1);});

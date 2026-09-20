@@ -25,7 +25,10 @@ class BrugOpenApp extends Homey.App {
   }
 
   async onUninit() {
-    if (this._dashboardEventTimer) clearTimeout(this._dashboardEventTimer);
+    if (this._dashboardEventTimer) {
+      if (this.homey && typeof this.homey.clearTimeout === 'function') this.homey.clearTimeout(this._dashboardEventTimer);
+      else clearTimeout(this._dashboardEventTimer);
+    }
     if (this.bridgeFeed) this.bridgeFeed.stop();
     if (this.trafficFeed) this.trafficFeed.stop();
   }
@@ -252,6 +255,12 @@ class BrugOpenApp extends Homey.App {
     return this._routeDevices ? [...this._routeDevices.values()] : [];
   }
 
+  notifyTrafficMonitoring() {
+    if (!this.trafficFeed || typeof this.trafficFeed.updateMonitoring !== 'function') return;
+    try { this.trafficFeed.updateMonitoring({ kick: true }); }
+    catch (err) { if (typeof this.error === 'function') this.error('Traffic monitoring update failed', err); }
+  }
+
   notifyRoutes() {
     if (!this._routeDevices) return;
     for (const device of this._routeDevices) {
@@ -265,7 +274,8 @@ class BrugOpenApp extends Homey.App {
 
   emitDashboardChanged() {
     if (this._dashboardEventTimer) return;
-    this._dashboardEventTimer = setTimeout(() => {
+    const schedule = this.homey && typeof this.homey.setTimeout === 'function' ? this.homey.setTimeout.bind(this.homey) : setTimeout;
+    this._dashboardEventTimer = schedule(() => {
       this._dashboardEventTimer = null;
       if (this.homey && this.homey.api && typeof this.homey.api.realtime === 'function') {
         this.homey.api.realtime('dashboard_changed', { at: new Date().toISOString() }).catch(() => {});

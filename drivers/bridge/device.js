@@ -30,14 +30,21 @@ class BridgeDevice extends Homey.Device {
     this._restoreRuntimeState();
     await this._updateHistoryStats(Date.now());
     if (this.homey.app && typeof this.homey.app.registerBridgeDevice === 'function') this.homey.app.registerBridgeDevice(this);
-    this._runtimeTimer = setInterval(() => {
-      this._runtimeTick().catch(err => this.log(`Runtime tick failed: ${err && err.message ? err.message : err}`));
-    }, DEVICE_TICK_MS);
+    this._runtimeTimer = this.homey && typeof this.homey.setInterval === 'function'
+      ? this.homey.setInterval(() => {
+        this._runtimeTick().catch(err => this.log(`Runtime tick failed: ${err && err.message ? err.message : err}`));
+      }, DEVICE_TICK_MS)
+      : setInterval(() => {
+        this._runtimeTick().catch(err => this.log(`Runtime tick failed: ${err && err.message ? err.message : err}`));
+      }, DEVICE_TICK_MS);
     await this._runtimeTick();
   }
 
   async onDeleted() {
-    if (this._runtimeTimer) clearInterval(this._runtimeTimer);
+    if (this._runtimeTimer) {
+      if (this.homey && typeof this.homey.clearInterval === 'function') this.homey.clearInterval(this._runtimeTimer);
+      else clearInterval(this._runtimeTimer);
+    }
     this._runtimeTimer = null;
     if (this.homey.app && typeof this.homey.app.unregisterBridgeDevice === 'function') this.homey.app.unregisterBridgeDevice(this);
   }
@@ -663,7 +670,12 @@ class BridgeDevice extends Homey.Device {
     await this._set('bridge_next_opening', this._nextOpeningDisplay(state));
 
     await this._handleOpenState(previous, next, state);
-    if (state.feedSource === 'current') await this._markCurrentDataSuccess(state.checkedAt);
+    if (state.feedSource === 'current') {
+      await this._markCurrentDataSuccess(state.checkedAt);
+      if (previous !== next && this.homey.app && typeof this.homey.app.notifyTrafficMonitoring === 'function') {
+        this.homey.app.notifyTrafficMonitoring();
+      }
+    }
     await this._updateHistoryStats(Date.now());
     if (state.feedSource === 'planning') {
       if (this._planningBootSynced) await this._handlePlanningChange(previousPlan, state);

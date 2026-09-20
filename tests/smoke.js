@@ -459,7 +459,7 @@ function testRealtimeFeedConfiguration() {
 
 function testStoreReadinessText() {
   const compose = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'app.json'), 'utf8'));
-  assert.strictEqual(compose.version, '1.1.2');
+  assert.strictEqual(compose.version, '1.1.3');
   assert.strictEqual(compose.description.nl, 'Weet wanneer een brug je route kan onderbreken.');
   assert.strictEqual(compose.description.en, 'Know when a bridge may interrupt your route.');
   const flowCondition = JSON.parse(fs.readFileSync(path.join(root, '.homeycompose', 'flow', 'conditions', 'bridge_status_is.json'), 'utf8'));
@@ -679,7 +679,7 @@ function testModuleSyntax() {
   }
 }
 
-console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted nationwide FIS search, bridge/opening/ISRS name matching, opening-parent and ISRS-name resolution, PDOK public-name fallback, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, v1.1.2 duration/countdown/data-watchdog features, explicit planning availability states, removed visible data-age tile, Flow titleFormatted, and SDK modules.');
+console.log('Smoke tests OK: DATEX lifecycle, immediate known status after valid current snapshot, cached snapshot sync, dual NDW feeds, 15s current polling, targeted nationwide FIS search, bridge/opening/ISRS name matching, opening-parent and ISRS-name resolution, PDOK public-name fallback, lazy ISRS resolve, no auto-search, three-state bridge-open indicator, removed legacy opening alarm, v1.1.3 duration/countdown/data-watchdog features, explicit planning availability states, removed visible data-age tile, Flow titleFormatted, and SDK modules.');
 })().catch(e => {
   console.error(e);
   process.exit(1);
